@@ -1,5 +1,5 @@
 
-from core.user_auth_route import *
+from core.router import *
 
 if __name__ == '__main__':
     app.run(port=5051)
