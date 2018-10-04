@@ -1,9 +1,11 @@
 <template>
     <div id="login">
         <h1>Register</h1>
-        <input type="text" name="username" v-model="input.username" placeholder="Username" />
-        <input type="email" name="email" v-model="input.email" placeholder="Email" />
-        <input type="password" name="password" v-model="input.password" placeholder="Password" />
+        <input type="text" name="fistName" v-model="input.firstName" placeholder="First Name" /><br>
+        <input type="text" name="lastName" v-model="input.lastName" placeholder="Last Name" /><br>
+        <input type="text" name="username" v-model="input.username" placeholder="Username" /><br>
+        <input type="email" name="email" v-model="input.email" placeholder="Email" /><br>
+        <input type="password" name="password" v-model="input.password" placeholder="Password" /><br>
         <button type="button" v-on:click="register()">Register</button>
     </div>
 </template>
@@ -14,6 +16,8 @@
         data() {
             return {
                 input: {
+                    firstName: "",
+                    lastName: "",
                     username: "",
                     email: "",
                     password: ""
@@ -31,7 +35,7 @@
                        body: JSON.stringify(post_data)
                    };
 
-                    this.$http.post('http://127.0.0.1:5000/register-user', this.input).then(function () {
+                    this.$http.post('http://127.0.0.1:5000/register-user', post_data).then(function () {
                         alert("WORKS");
                   });
 
