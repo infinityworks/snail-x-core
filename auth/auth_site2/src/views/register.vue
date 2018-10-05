@@ -1,14 +1,29 @@
 <template>
     <div id="login">
+        <form
+          id="reg"
+          @submit="checkForm"
+          action="register()"
+          method="post"
+          novalidate="true"
+        >
+        <center>
         <h1>Register</h1>
-        <input type="text" name="fistName" v-model="input.firstName" placeholder="First Name" /><br>
-        <input type="text" name="lastName" v-model="input.lastName" placeholder="Last Name" /><br>
-        <input type="text" name="username" v-model="input.username" placeholder="Username" /><br>
-        <input type="email" name="email" v-model="input.email" placeholder="Email" /><br>
-        <input type="password" name="password" v-model="input.password" placeholder="Password" /><br>
-        <button type="button" v-on:click="register()">Register</button>
-	<hr><h3>AD: Say good bye to dirty stains</h3>
-	<iframe width="560" height="315" src="https://www.youtube.com/embed/6-7NDP8V-6A" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            <hr>
+        <div class="form-group">
+            <input type="text" class="form-control" name="fistName" v-model="input.firstName" placeholder="First Name" />
+            <br>
+            <input type="text" class="form-control" name="lastName" v-model="input.lastName" placeholder="Last Name" />
+            <br>
+            <input type="text" class="form-control" name="username" v-model="input.username" placeholder="Username" />
+            <br>
+            <input type="email" class="form-control" name="email" v-model="input.email" placeholder="Email" /><br>
+            <input type="password" class="form-control" name="password" v-model="input.password" placeholder="Password" />
+            <br>
+            <button type="button" class="btn btn-dark" v-on:click="register()">Register</button>
+        </div>
+        </center>
+        </form>
     </div>
 
 
@@ -30,18 +45,43 @@
         },
 
         methods: {
-            register() {
-                    var post_data = this.input;
-                    console.log(post_data);
-                    const requestOptions = {
-                       method: 'POST',
-                       headers: { 'Content-Type': 'application/json' },
-                       body: JSON.stringify(post_data)
-                   };
 
-                    this.$http.post('http://127.0.0.1:5000/register-user', post_data).then(function () {
-                        alert("WORKS");
-                  });
+            checkForm: function (e) {
+                this.errors = [];
+
+                if (!this.name) {
+                    this.errors.push("Name required.");
+                }
+                if (!this.email) {
+                    this.errors.push('Email required.');
+                } else if (!this.validEmail(this.email)) {
+                    this.errors.push('Valid email required.');
+                }
+
+                if (!this.errors.length) {
+                    return true;
+                }
+
+                e.preventDefault();
+            },
+            validEmail: function (email) {
+                var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(email);
+            },
+
+
+            register() {
+                var post_data = this.input;
+                console.log(post_data);
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(post_data)
+                };
+
+                this.$http.post('http://127.0.0.1:5000/register-user', post_data).then(function () {
+                    alert("WORKS");
+                });
 
             }
         }
@@ -50,11 +90,11 @@
 
 <style scoped>
     #login {
-        width: 500px;
+        width: 600px;
         border: 1px solid #CCCCCC;
         background-color: #FFFFFF;
         margin: auto;
-        margin-top: 200px;
+        margin-top: 100px;
         padding: 20px;
     }
 </style>
