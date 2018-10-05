@@ -1,9 +1,13 @@
 from flask import Flask, render_template, request
 from flask_cors import CORS
-from core import app
+#from core import app
 
 import json
 import mysql.connector
+
+app = Flask(__name__)
+
+CORS(app)
 
 
 @app.route("/auth-user", methods=["POST"])
@@ -26,8 +30,15 @@ def register():
     )
     mycursor = mydb.cursor()
 
-    sqlstatement = "INSERT INTO Users (firstName, lastName, username, email, password) VALUES ({}, {}, {}, {}, {});".format(form_data[0], form_data[1], form_data[2], form_data[3], form_data[4])
+    print(form_data['firstName'])
+    sqlstatement = "INSERT INTO users (firstName, lastName, username, email, password) VALUES ('{}', '{}', '{}', '{}', '{}');".format(form_data['firstName'], form_data['lastName'], form_data['username'], form_data['email'], form_data['password'])
+
+    print(sqlstatement)
+
     mycursor.execute(sqlstatement)
 
     mydb.commit()
     return "Success"
+
+if __name__ == '__main__':
+    app.run(debug=True, host="0.0.0.0")

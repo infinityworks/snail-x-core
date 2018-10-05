@@ -1,13 +1,16 @@
 <template>
     <div id="login">
         <h1>Register</h1>
-        <input type="text" name="fistName" v-model="input.firstName" placeholder="First Name" /><br>
-        <input type="text" name="lastName" v-model="input.lastName" placeholder="Last Name" /><br>
-        <input type="text" name="username" v-model="input.username" placeholder="Username" /><br>
-        <input type="email" name="email" v-model="input.email" placeholder="Email" /><br>
-        <input type="password" name="password" v-model="input.password" placeholder="Password" /><br>
+        <input type="text" name="fistName" v-model="input.firstName" placeholder="First Name"  maxlength="20" required/><br>
+        <input type="text" name="lastName" v-model="input.lastName" placeholder="Last Name" maxlength="20" required/><br>
+        <input type="text" name="username" v-model="input.username" placeholder="Username" maxlength="16" required/><br>
+        <input type="email" name="email" v-model="input.email" placeholder="Email" required/><br>
+        <input type="password" name="password" v-model="input.password" placeholder="Password" maxlength="32" required/><br>
         <button type="button" v-on:click="register()">Register</button>
     </div>
+    <img src="https://cdn.bumfords.com/images/P/DC70709.jpg"/>
+    <h4>Advert</h4>
+
 </template>
 
 <script>
