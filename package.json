@@ -1,0 +1,23 @@
+{
+  "name": "snail-x-core",
+  "version": "1.0.0",
+  "description": "core functionality for the SnailX project",
+  "main": "index.js",
+  "scripts": {
+    "test": "blob"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/infinityworks/snail-x-core.git"
+  },
+  "keywords": [
+    "grad-project",
+    "snail-x"
+  ],
+  "author": "ftp-games",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/infinityworks/snail-x-core/issues"
+  },
+  "homepage": "https://github.com/infinityworks/snail-x-core#readme"
+}
