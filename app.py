@@ -1,5 +1,7 @@
-
+from core import *
 from core.router import *
 
+
 if __name__ == '__main__':
-    app.run(port=5051)
+    app.run(host="0.0.0.0")
+

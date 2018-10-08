@@ -1,11 +1,8 @@
 from flask import Flask
-#from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
-from flask_debugtoolbar import DebugToolbarExtension
+from flask_cors import CORS
+from .repositories.user_repository import UserRepository
 
+# Setting up the flask end point to call data from front end to
 app = Flask(__name__)
+CORS(app)
 app.debug = True
-app.config['SECRET_KEY'] = 'random'
-#db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
-toolbar = DebugToolbarExtension(app)
