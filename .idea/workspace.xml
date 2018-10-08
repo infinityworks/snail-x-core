@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5b6fea7e-70c4-4d0c-a47a-8997c6d97e06" name="Default Changelist" comment="">
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+>>>>>>> 47a40590ed3b8783905ec49eadd6a1e0a9a22521
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,23 +24,26 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
+          <entry key="gitignore" value="1" />
           <entry key="py" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
+          <entry key="PLAIN_TEXT" value="1" />
           <entry key="Python" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="dummy" value="22" />
+          <entry key="dummy" value="28" />
+          <entry key="gitignore" value="21" />
           <entry key="py" value="511" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="22" />
+          <entry key="PLAIN_TEXT" value="49" />
           <entry key="Python" value="511" />
         </counts>
       </usages-collector>
@@ -94,16 +101,22 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/repositories/user_repository.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="60">
               <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
+=======
+            <state relative-caret-position="15">
+              <caret line="1" column="16" selection-start-line="1" selection-start-column="16" selection-end-line="1" selection-end-column="16" />
+>>>>>>> 47a40590ed3b8783905ec49eadd6a1e0a9a22521
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+<<<<<<< HEAD
         <entry file="file://$PROJECT_DIR$/core/repositories/__init__.py">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
@@ -113,6 +126,12 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="135">
               <caret line="9" selection-start-line="9" selection-end-line="9" />
+=======
+        <entry file="file://$PROJECT_DIR$/core/router.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+>>>>>>> 47a40590ed3b8783905ec49eadd6a1e0a9a22521
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -132,6 +151,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/models/user.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="150">
               <caret line="10" column="32" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
             </state>
@@ -158,22 +178,39 @@
               <folding>
                 <element signature="e#0#56#0" expanded="true" />
                 <marker date="1539008530146" expanded="true" signature="168:170" ph="..." />
+=======
+            <state relative-caret-position="15">
+              <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+              <folding>
+                <marker date="1538643794928" expanded="true" signature="641:646" ph="..." />
+>>>>>>> 47a40590ed3b8783905ec49eadd6a1e0a9a22521
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+<<<<<<< HEAD
         <entry file="file://$PROJECT_DIR$/Procfile">
           <provider selected="true" editor-type-id="text-editor">
             <state>
               <caret column="20" selection-start-column="20" selection-end-column="20" />
+=======
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="65">
+              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+>>>>>>> 47a40590ed3b8783905ec49eadd6a1e0a9a22521
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+<<<<<<< HEAD
         <entry file="file://$PROJECT_DIR$/run.py">
+=======
+        <entry file="file://$PROJECT_DIR$/core/__init__.py">
+>>>>>>> 47a40590ed3b8783905ec49eadd6a1e0a9a22521
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="105">
               <caret line="7" selection-start-line="7" selection-end-line="7" />
@@ -220,6 +257,7 @@
         <option value="$PROJECT_DIR$/core/routes/user_auth_route.py" />
         <option value="$PROJECT_DIR$/core/routes/__init__.py" />
         <option value="$PROJECT_DIR$/core/user_auth_route.py" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/login_system/auth.py" />
         <option value="$PROJECT_DIR$/auth/init_auth.py" />
         <option value="$PROJECT_DIR$/auth/auth_site/src/main.js" />
@@ -237,6 +275,9 @@
         <option value="$PROJECT_DIR$/core/__init__.py" />
         <option value="$PROJECT_DIR$/core/router.py" />
         <option value="$PROJECT_DIR$/Procfile" />
+=======
+        <option value="$PROJECT_DIR$/.gitignore" />
+>>>>>>> 47a40590ed3b8783905ec49eadd6a1e0a9a22521
       </list>
     </option>
   </component>
@@ -275,6 +316,7 @@
               <item name="snail-x-core" type="462c0819:PsiDirectoryNode" />
               <item name="core" type="462c0819:PsiDirectoryNode" />
             </path>
+<<<<<<< HEAD
             <path>
               <item name="snail-x-core" type="b2602c69:ProjectViewProjectNode" />
               <item name="snail-x-core" type="462c0819:PsiDirectoryNode" />
@@ -298,6 +340,8 @@
               <item name="snail-x-core" type="462c0819:PsiDirectoryNode" />
               <item name="front-end" type="462c0819:PsiDirectoryNode" />
             </path>
+=======
+>>>>>>> 47a40590ed3b8783905ec49eadd6a1e0a9a22521
           </expand>
           <select />
         </subPane>
@@ -401,6 +445,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/auth/auth_site/src/main.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state>
           <caret selection-end-line="12" />
         </state>
@@ -467,6 +512,27 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+=======
+        <state relative-caret-position="15">
+          <caret line="1" column="16" selection-start-line="1" selection-start-column="16" selection-end-line="1" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="20" lean-forward="true" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/router.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+>>>>>>> 47a40590ed3b8783905ec49eadd6a1e0a9a22521
           <folding>
             <element signature="e#0#56#0" expanded="true" />
             <marker date="1539008530146" expanded="true" signature="168:170" ph="..." />
@@ -476,6 +542,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/models/user.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="150">
           <caret line="10" column="32" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
         </state>
@@ -507,10 +574,17 @@
           <caret line="50" column="38" selection-start-line="50" selection-start-column="24" selection-end-line="50" selection-end-column="38" />
           <folding>
             <element signature="e#0#49#0" expanded="true" />
+=======
+        <state relative-caret-position="15">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+          <folding>
+            <marker date="1538643794928" expanded="true" signature="641:646" ph="..." />
+>>>>>>> 47a40590ed3b8783905ec49eadd6a1e0a9a22521
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/core/repositories/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -538,6 +612,12 @@
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
+=======
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="65">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+>>>>>>> 47a40590ed3b8783905ec49eadd6a1e0a9a22521
         </state>
       </provider>
     </entry>

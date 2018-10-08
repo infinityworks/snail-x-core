@@ -6,4 +6,3 @@ from .repositories.user_repository import UserRepository
 app = Flask(__name__)
 CORS(app)
 app.debug = True
-
