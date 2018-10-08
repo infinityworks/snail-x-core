@@ -9,7 +9,7 @@
             <h1>Register</h1>
             <hr>
             <div class="form-group">
-                <input type="text" class="form-control" name="fistName" v-model="input.firstName"
+                <input type="text" class="form-control" name="firstName" v-model="input.firstName"
                        placeholder="First Name"/>
                 <br>
                 <input type="text" class="form-control" name="lastName" v-model="input.lastName"
