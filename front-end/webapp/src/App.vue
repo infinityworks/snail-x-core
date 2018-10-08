@@ -8,13 +8,13 @@
                  src="https://banner2.kisspng.com/20180225/avw/kisspng-escargot-sea-snail-clip-art-brown-cartoon-snail-5a92648eaab006.4875330315195434386992.jpg"/>
         </div>
 
-        <div class="navigation-bar">
+        <div class="navigation-bar" id="navbar">
             <nav class="row">
                 <router-link to="/" class="nav-link">Home</router-link>
                 <router-link to="/" class="nav-link">Enter</router-link>
                 <router-link to="/" class="nav-link">Results</router-link>
                 <router-link style="padding-right: 19rem" to="/" class="nav-link">Leaderboards</router-link>
-                <router-link to="/" class="nav-link">Login</router-link>
+                <router-link to="/login" class="nav-link">Login</router-link>
                 <router-link to="/register" class="nav-link">Register</router-link>
                 <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
             </nav>

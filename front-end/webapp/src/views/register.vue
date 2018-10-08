@@ -20,7 +20,7 @@
                 <input type="password" class="form-control" name="password" v-model="input.password"
                        placeholder="Password"/>
                 <br>
-                <button style="float: right;" type="button" class="btn btn-success" v-on:click="register()">Register</button>
+                <button style="float: right;" type="button" class="btn btn-primary" v-on:click="register()">Register</button>
                 <button style="margin-right: 1em; float: right" type="button" class="btn btn-warning" onclick="window.history.back()">Back</button>
             </div>
         </form>
