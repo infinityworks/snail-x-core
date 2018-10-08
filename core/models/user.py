@@ -1,23 +1,14 @@
-from idna import unicode
-
-from core import db
-from core import bcrypt
 
 
-class User(db.Model):
+class User():
 
     __tablename__ = "users"
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
-    email = db.Column(db.String, nullable=False)
-    password = db.Column(db.String)
 
     def __init__(self, first_name, last_name, email, password):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
-        self.password = bcrypt.generate_password_hash(password)
+        self.password = password
 
     def is_authenticated(self):
         return True
@@ -29,4 +20,4 @@ class User(db.Model):
         return False
 
     def get_id(self):
-        return unicode(self.id)
+        return self.id

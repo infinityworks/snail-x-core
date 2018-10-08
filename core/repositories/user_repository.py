@@ -2,6 +2,7 @@ import flask_bcrypt
 from core.models.user import User
 import mysql.connector
 from ..repositories import db_connection
+import flask
 
 
 class UserRepository():
@@ -24,9 +25,5 @@ class UserRepository():
 
         db_connection.close()
 
-
-if __name__ == '__main__':
-    test = UserRepository()
-    test.register("Mike", "Winker", "Winker@winky.com", "bjdjhfhhf")
-
+        return True
 
