@@ -16,7 +16,6 @@
         </div>
 
         <div id="sidebanner">
-            <img style="padding-top:100px; padding-left: 1000px; position: absolute" src="http://www.shakeout.org/2008/downloads/ShakeOut_BannerAds_GetReady_160x600_v8.gif">
         </div>
         <router-view @authenticated="setAuthenticated" />
 

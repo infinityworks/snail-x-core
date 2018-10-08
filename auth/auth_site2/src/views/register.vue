@@ -15,8 +15,6 @@
             <br>
             <input type="text" class="form-control" name="lastName" v-model="input.lastName" placeholder="Last Name" />
             <br>
-            <input type="text" class="form-control" name="username" v-model="input.username" placeholder="Username" />
-            <br>
             <input type="email" class="form-control" name="email" v-model="input.email" placeholder="Email" /><br>
             <input type="password" class="form-control" name="password" v-model="input.password" placeholder="Password" />
             <br>

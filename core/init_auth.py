@@ -9,6 +9,13 @@ app = Flask(__name__)
 
 CORS(app)
 
+class Database():
+
+    def __init__(self):
+        print('DB Init')
+
+
+
 
 @app.route("/auth-user", methods=["POST"])
 def auth():
@@ -42,3 +49,7 @@ def register():
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
+
+
+if email is in db:
+    return "email already in db"
