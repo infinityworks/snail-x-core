@@ -9,15 +9,15 @@
         </div>
 
         <div class="navigation-bar" id="navbar">
-            <nav class="row">
-                <router-link to="/" class="nav-link">Home</router-link>
-                <router-link to="/" class="nav-link">Enter</router-link>
-                <router-link to="/" class="nav-link">Results</router-link>
-                <router-link style="padding-right: 19rem" to="/" class="nav-link">Leaderboards</router-link>
-                <router-link to="/login" class="nav-link">Login</router-link>
-                <router-link to="/register" class="nav-link">Register</router-link>
-                <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
-            </nav>
+            <ul class="nav">
+                <li><router-link to="/" class="nav-link">Home</router-link></li>
+                <li><router-link to="/" class="nav-link">Enter</router-link></li>
+                <li><router-link to="/" class="nav-link">Results</router-link></li>
+                <li><router-link to="/" class="nav-link">Leaderboards</router-link></li>
+                <li><router-link to="/login" class="nav-link">Login</router-link></li>
+                <li><router-link to="/register" class="nav-link">Register</router-link></li>
+                <li><router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link></li>
+            </ul>
         </div>
 
         <div id="sidebanner"></div>
@@ -39,7 +39,7 @@
         },
         mounted() {
             if (!this.authenticated) {
-                this.$router.replace({name: "register"});
+                this.$router.replace({name: "Register.vue"});
             }
         },
         methods: {
@@ -88,5 +88,9 @@
         position: fixed;
         height: 20%;
         width: 18%;
+    }
+
+    li {
+        font-weight: bold;
     }
 </style>

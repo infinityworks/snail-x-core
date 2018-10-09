@@ -9,6 +9,13 @@ import json
 @app.route("/register-user", methods=["POST"])
 def register_user():
     form_data = json.loads(request.data)
-    user = UserRepository()
-    user.register(form_data['firstName'], form_data['lastName'], form_data['email'], form_data['password'])
+    user_repository = UserRepository()
+    user_repository.register(form_data['firstName'], form_data['lastName'], form_data['email'], form_data['password'])
     return ""
+
+
+@app.route("/login-user", methods=["POST"])
+def login():
+    form_data = json.loads(request.data)
+    user_repository = UserRepository()
+    return user_repository.login(form_data['email'], form_data['password'])

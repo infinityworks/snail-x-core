@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import RegisterComponent from "./views/register.vue"
-import IndexComponent from "./views/Index.vue"
+import RegisterComponent from "./views/Register.vue"
+import HomeComponent from "./views/Home.vue"
 import LoginComponent from "./views/Login.vue"
 
 Vue.use(Router);
@@ -10,8 +10,8 @@ export default new Router({
     routes: [
         {
             path: '/',
-            name: "index",
-            component: IndexComponent
+            name: "home",
+            component: HomeComponent
         },
         {
             path: '/login',
@@ -20,7 +20,7 @@ export default new Router({
         },
         {
             path: "/register",
-            name: "register",
+            name: "Register.vue",
             component: RegisterComponent
         }
     ]
