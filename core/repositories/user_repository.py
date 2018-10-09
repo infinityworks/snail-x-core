@@ -7,23 +7,13 @@ import flask
 
 class UserRepository():
 
+    def __init__(self, db_connection):
+        self.db = db_connection.cursor()
+
     def register(self, first_name, last_name, email, password):
         user = User(first_name, last_name, email, password)
-
-        db = db_connection.cursor()
-
-        #user.password = bcrypt.generate_password_hash(password)
 
         sqlstatement = "INSERT INTO users (firstName, lastName, email, password) VALUES ('{}', '{}', '{}', '{}');".format(
             user.first_name, user.last_name, user.email, user.password)
 
-        print(sqlstatement)
-
-        db.execute(sqlstatement)
-
-        db_connection.commit()
-
-        db_connection.close()
-
-        return True
-
+        return sqlstatement
