@@ -23,8 +23,6 @@ class UserRepository:
 
         db_connection.commit()
 
-        db_connection.close()
-
         return True
 
     def login(self, user_email, user_password):
@@ -47,8 +45,6 @@ class UserRepository:
         db_connection.commit()
 
         user = db.fetchone()
-
-        db_connection.close()
 
         return user
 

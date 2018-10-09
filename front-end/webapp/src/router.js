@@ -16,12 +16,18 @@ export default new Router({
         {
             path: '/login',
             name: "login",
-            component: LoginComponent
+            component: LoginComponent,
+            meta: {
+                requiresVisitor: true
+            }
         },
         {
             path: "/register",
             name: "Register.vue",
-            component: RegisterComponent
+            component: RegisterComponent,
+            meta: {
+                requiresVisitor: true
+            }
         }
     ]
 })

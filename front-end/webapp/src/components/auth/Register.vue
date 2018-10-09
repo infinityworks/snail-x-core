@@ -62,11 +62,15 @@
                 return re.test(email);
             },
             register() {
-                let post_data = { firstName : this.firstName, lastName : this.lastName, email : this.email, password : this.password };
-                console.log(post_data);
-                this.$http.post('http://127.0.0.1:5000/register-user', post_data).then(function () {
-                    alert("WORKS");
-                });
+                this.$store.dispatch('registerUser', {
+                    firstName: this.firstName,
+                    lastName: this.lastName,
+                    email: this.email,
+                    password: this.password
+                })
+                    .then(response => {
+                        this.$router.push({name: 'login'})
+                    })
             }
         }
     }

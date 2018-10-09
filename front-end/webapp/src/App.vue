@@ -29,7 +29,7 @@
                     <router-link to="/register" class="nav-link">Register</router-link>
                 </li>
                 <li v-if="loggedIn">
-                    <router-link v-if="authenticated" to="/logout" @click.native="logout()">Logout
+                    <router-link  to="/logout" class="nav-link" @click.native="logout()">Logout
                     </router-link>
                 </li>
             </ul>
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+    import { mapGetters } from "vuex"
     export default {
         name: 'App',
         data() {
@@ -48,18 +49,11 @@
                 authenticated: false,
             }
         },
-        mounted() {
-            if (!this.authenticated) {
-                this.$router.replace({name: "Register.vue"});
-            }
-        },
         computed: {
-            loggedIn() {
-                return this.$store.getters.loggedIn
-            },
-            user() {
-                return this.$store.getters.userEmail
-            }
+            ...mapGetters([
+                'loggedIn',
+                'userEmail'
+            ])
         },
         methods: {
             setAuthenticated(status) {
@@ -96,6 +90,7 @@
         margin: 0 0 24px;
         flex-wrap: nowrap !important;
         list-style: none;
+        align-items: center;
     }
 
     .nav a {
@@ -132,6 +127,7 @@
         padding-left: 1em;
         margin-bottom: 1em;
         width: 750px;
+        display: flex;
     }
 
     body {

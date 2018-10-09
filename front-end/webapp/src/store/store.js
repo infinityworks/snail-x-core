@@ -34,6 +34,23 @@ export const store = new Vuex.Store({
                         reject(error);
                     })
             })
+        },
+        registerUser(context, credentials) {
+            return new Promise((resolve, reject) => {
+                axios.post('http://127.0.0.1:5000/register-user', {
+                    firstName: credentials.firstName,
+                    lastName: credentials.lastName,
+                    email: credentials.email,
+                    password: credentials.password,
+                })
+                    .then(response => {
+                        resolve(response);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        reject(error);
+                    })
+            })
         }
     }
 });
