@@ -2,14 +2,14 @@
     <div id="login">
         <h3 class="page-title">Login</h3>
         <hr>
-        <div class="form-group">
+        <form action="#" @submit.prevent="login">>
             <input class="form-control" type="text" name="username"
                    v-model="input.username" placeholder="Username"/>
             <input class="form-control" type="password" name="password"
                    v-model="input.password" placeholder="Password"/>
-            <button style="float: right" class="btn btn-primary" type="button" v-on:click="Login()">Login</button>
+            <button style="float: right" class="btn btn-primary" type="button" v-on:click="login()">Login</button>
             <button style="margin-right: 1em; float: right" type="button" class="btn btn-warning" onclick="window.history.back()">Back</button>
-        </div>
+        </form>
     </div>
 </template>
 
@@ -19,25 +19,22 @@
         name: 'Login',
         data() {
             return {
-                input: {
-                    username: "",
-                    password: ""
-                }
+                username: "",
+                password: ""
             }
         },
         methods: {
-            login() {
-                if (this.input.username !== "" && this.input.password !== "") {
-                    if (this.input.username === this.$parent.mockAccount.username && this.input.password === this.$parent.mockAccount.password) {
-                        this.$emit("authenticated", true);
-                        this.$router.replace({name: "secure"});
-                    } else {
-                        console.log("The username and / or password is incorrect");
-                    }
-                } else {
-                    console.log("A username and password must be present");
+            methods: {
+                login() {
+                  this.$store.dispatch('loginUser', {
+                    username: this.username,
+                    password: this.password,
+                  })
+                    .then(response => {
+                      this.$router.push({ name: 'home' })
+                    })
                 }
-            }
+              }
         }
     }
 </script>
