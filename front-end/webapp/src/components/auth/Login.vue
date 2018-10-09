@@ -1,14 +1,14 @@
 <template>
     <div id="login">
-        <h1>Login</h1>
+        <h3 class="page-title">Login</h3>
         <hr>
         <div class="form-group">
-            <input style="margin-bottom: 0.5em" class="form-control" type="text" name="username"
+            <input class="form-control" type="text" name="username"
                    v-model="input.username" placeholder="Username"/>
-            <input style="margin-bottom: 0.5em" class="form-control" type="password" name="password"
+            <input class="form-control" type="password" name="password"
                    v-model="input.password" placeholder="Password"/>
             <button style="float: right" class="btn btn-primary" type="button" v-on:click="Login()">Login</button>
-                <button style="margin-right: 1em; float: right" type="button" class="btn btn-warning" onclick="window.history.back()">Back</button>
+            <button style="margin-right: 1em; float: right" type="button" class="btn btn-warning" onclick="window.history.back()">Back</button>
         </div>
     </div>
 </template>
@@ -49,8 +49,12 @@
         top: 15%;
         width: 50%;
         border: 1px solid grey;
-        background-color: whitesmoke;
+        background-color: white;
         margin: 200px auto auto;
         padding: 20px;
+    }
+
+    input {
+        margin-bottom: 1em;
     }
 </style>

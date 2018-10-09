@@ -6,20 +6,17 @@
               method="post"
               novalidate="true">
 
-            <h1>Register</h1>
+            <h3 class="page-title">Register</h3>
             <hr>
             <div class="form-group">
                 <input type="text" class="form-control" name="firstName" v-model="input.firstName"
                        placeholder="First Name"/>
-                <br>
                 <input type="text" class="form-control" name="lastName" v-model="input.lastName"
                        placeholder="Last Name"/>
-                <br>
                 <input type="email" class="form-control" name="email" v-model="input.email"
-                       placeholder="Email"/><br>
+                       placeholder="Email"/>
                 <input type="password" class="form-control" name="password" v-model="input.password"
                        placeholder="Password"/>
-                <br>
                 <button style="float: right;" type="button" class="btn btn-primary" v-on:click="Register()">Register</button>
                 <button style="margin-right: 1em; float: right" type="button" class="btn btn-warning" onclick="window.history.back()">Back</button>
             </div>
@@ -85,12 +82,16 @@
 <style scoped>
     #register {
         position:fixed;
-        top: 18%;
-        left: 15%;
+        top: 10%;
+        left: 11%;
         width: 50%;
-        border: 1px solid #CCCCCC;
+        border: 1px solid grey;
         background-color: #FFFFFF;
         margin: 10em;
         padding: 20px;
+    }
+
+    input {
+        margin-bottom: 1em;
     }
 </style>
