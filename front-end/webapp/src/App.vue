@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="app" class="container">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
               integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
               crossorigin="anonymous">
@@ -54,6 +54,11 @@
 </script>
 
 <style>
+
+    .container {
+        max-width: 60%;
+    }
+
     .navigation-bar {
         background-color: whitesmoke;
         border: 1px grey solid;
