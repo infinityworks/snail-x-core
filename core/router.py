@@ -1,4 +1,3 @@
-from .repositories.user_repository import UserRepository
 from core.repositories.user_repository import UserRepository
 from flask import Blueprint, request
 import json
