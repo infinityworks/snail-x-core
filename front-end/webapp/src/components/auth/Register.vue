@@ -9,16 +9,19 @@
             <h3 class="page-title">Register</h3>
             <hr>
             <div class="form-group">
-                <input type="text" class="form-control" name="firstName" v-model="input.firstName"
+                <input type="text" class="form-control" name="firstName" v-model="firstName"
                        placeholder="First Name"/>
-                <input type="text" class="form-control" name="lastName" v-model="input.lastName"
+                <input type="text" class="form-control" name="lastName" v-model="lastName"
                        placeholder="Last Name"/>
-                <input type="email" class="form-control" name="email" v-model="input.email"
+                <input type="email" class="form-control" name="email" v-model="email"
                        placeholder="Email"/>
-                <input type="password" class="form-control" name="password" v-model="input.password"
+                <input type="password" class="form-control" name="password" v-model="password"
                        placeholder="Password"/>
-                <button style="float: right;" type="button" class="btn btn-primary" v-on:click="Register()">Register</button>
-                <button style="margin-right: 1em; float: right" type="button" class="btn btn-warning" onclick="window.history.back()">Back</button>
+                <button style="float: right;" type="button" class="btn btn-primary" @click="register()">Register
+                </button>
+                <button style="margin-right: 1em; float: right" type="button" class="btn btn-warning"
+                        onclick="window.history.back()">Back
+                </button>
             </div>
         </form>
     </div>
@@ -29,17 +32,13 @@
         name: 'Register',
         data() {
             return {
-                input: {
-                    firstName: "",
-                    lastName: "",
-                    email: "",
-                    password: ""
-                }
+                firstName: "",
+                lastName: "",
+                email: "",
+                password: ""
             }
         },
-
         methods: {
-
             checkForm: function (e) {
                 this.errors = [];
 
@@ -62,15 +61,9 @@
                 const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 return re.test(email);
             },
-
             register() {
-                let post_data = this.input;
+                let post_data = { firstName : this.firstName, lastName : this.lastName, email : this.email, password : this.password };
                 console.log(post_data);
-                const requestOptions = {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(post_data)
-                };
                 this.$http.post('http://127.0.0.1:5000/register-user', post_data).then(function () {
                     alert("WORKS");
                 });
@@ -81,7 +74,7 @@
 
 <style scoped>
     #register {
-        position:fixed;
+        position: fixed;
         top: 10%;
         left: 11%;
         width: 50%;

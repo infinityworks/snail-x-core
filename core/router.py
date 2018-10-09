@@ -18,4 +18,4 @@ def register_user():
 def login():
     form_data = json.loads(request.data)
     user_repository = UserRepository()
-    return user_repository.login(form_data['email'], form_data['password'])
+    return json.dumps(user_repository.login(form_data['username'], form_data['password']))

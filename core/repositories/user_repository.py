@@ -33,16 +33,20 @@ class UserRepository:
         if not user or user[3] != user_password:
             return False
 
-        return user
+        return user_email
 
     def find_one_by_email(self, email):
-        db = db_connection.cursor()
+        db = db_connection.cursor(buffered=True)
 
-        sql = "select * from users where email = {}".format(email)
+        sql = "select * from users where email = \'" + email + "\'"
 
-        user = db.execute(sql)
+        print("sql: " + sql)
+
+        db.execute(sql)
 
         db_connection.commit()
+
+        user = db.fetchone()
 
         db_connection.close()
 

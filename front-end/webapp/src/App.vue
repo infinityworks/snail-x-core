@@ -22,14 +22,14 @@
                 <li>
                     <router-link to="/" class="nav-link">Leaderboards</router-link>
                 </li>
-                <li>
+                <li v-if="!loggedIn">
                     <router-link to="/login" class="nav-link">Login</router-link>
                 </li>
-                <li>
+                <li v-if="!loggedIn">
                     <router-link to="/register" class="nav-link">Register</router-link>
                 </li>
-                <li>
-                    <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout
+                <li v-if="loggedIn">
+                    <router-link v-if="authenticated" to="/logout" @click.native="logout()">Logout
                     </router-link>
                 </li>
             </ul>
@@ -46,15 +46,19 @@
         data() {
             return {
                 authenticated: false,
-                mockAccount: {
-                    username: "James",
-                    password: "password"
-                }
             }
         },
         mounted() {
             if (!this.authenticated) {
                 this.$router.replace({name: "Register.vue"});
+            }
+        },
+        computed: {
+            loggedIn() {
+                return this.$store.getters.loggedIn
+            },
+            user() {
+                return this.$store.getters.userEmail
             }
         },
         methods: {
@@ -90,6 +94,8 @@
         padding: 15px 0;
         justify-content: flex-end;
         margin: 0 0 24px;
+        flex-wrap: nowrap !important;
+        list-style: none;
     }
 
     .nav a {
@@ -125,6 +131,7 @@
         top: 26%;
         padding-left: 1em;
         margin-bottom: 1em;
+        width: 750px;
     }
 
     body {

@@ -6,11 +6,14 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
-        user: null,
+        user: localStorage.getItem('user_email') || null,
     },
     getters: {
         loggedIn(state) {
             return state.user !== null
+        },
+        userEmail(state) {
+            return state.user
         }
     },
     actions: {
@@ -22,7 +25,8 @@ export const store = new Vuex.Store({
                 })
                     .then(response => {
                         const user_email = response.data;
-                        console.log(user_email);
+                        localStorage.setItem('user_email', user_email);
+                        context.commit('loginUser', user_email);
                         resolve(response);
                     })
                     .catch(error => {
