@@ -96,10 +96,14 @@
         color: #636b6f;
         padding: 0 25px;
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 800;
         letter-spacing: .1rem;
         text-decoration: none;
         text-transform: uppercase;
+    }
+
+    .nav a:hover {
+        color: green;
     }
 
     .btn {
@@ -129,9 +133,6 @@
 
     }
 
-    h1 {
-    }
-
     #app {
         width: 1024px;
         margin: auto;
@@ -152,9 +153,5 @@
         padding: 0;
         margin-top: 0;
 
-    }
-
-    li {
-        font-weight: bold;
     }
 </style>
