@@ -29,7 +29,7 @@
                 username: this.username,
                 password: this.password,
               })
-                .then(response => {
+                .then(() => {
                   this.$router.push({ name: 'home' })
                 })
             }
