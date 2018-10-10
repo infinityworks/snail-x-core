@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/infinityworks/snail-x-core/issues"
   },
-  "homepage": "https://github.com/infinityworks/snail-x-core#readme"
+  "homepage": "https://github.com/infinityworks/snail-x-core#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bootstrap-vue": "^2.0.0-rc.11"
+  }
 }
