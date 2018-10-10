@@ -13,7 +13,7 @@ def get_db():
 
 
 @app.teardown_appcontext
-def teardown_db(exception):
+def teardown_db():
     db = getattr(g, '_database', None)
 
     if db is not None:
@@ -25,5 +25,5 @@ def connect_to_database():
         host="localhost",
         user="root",
         passwd="mysqlpasswd",
-        database = "snailRacing"
+        database="snailRacing"
     )

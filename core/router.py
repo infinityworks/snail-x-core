@@ -1,7 +1,6 @@
 from core.repositories.user_repository import UserRepository
 from flask import Blueprint, request
-from flask_api import status, exceptions
-import json
+from flask_api import status
 
 user = Blueprint('user', __name__)
 
@@ -12,8 +11,11 @@ user = Blueprint('user', __name__)
 def register_user():
     form_data = request.form
     user_repository = UserRepository()
-    user_repository.register(form_data['firstName'], form_data['lastName'], form_data['email'], form_data['password'])
-    return {"message": "Successfully registered the user."}, status.HTTP_201_CREATED
+    success = user_repository.register(form_data['firstName'], form_data['lastName'], form_data['email'], form_data['password'])
+    if success:
+        return {"message": "Successfully registered the user."}, status.HTTP_201_CREATED
+    else:
+        return {"message": "Failed registering the user with the supplied details."}, status.HTTP_400_BAD_REQUEST
 
 
 @user.route("/login-user", methods=["POST"])
