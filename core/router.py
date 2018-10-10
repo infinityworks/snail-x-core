@@ -1,20 +1,21 @@
-from .repositories.user_repository import UserRepository
-from flask import Flask, render_template, request
-from core import app
+from core.repositories.user_repository import UserRepository
+from flask import Blueprint, request
 import json
+
+user = Blueprint('user', __name__)
 
 
 # <-- End Points Below -->
 
-@app.route("/register-user", methods=["POST"])
+@user.route("/register-user", methods=["POST"])
 def register_user():
-    form_data = json.loads(request.data)
+    form_data = request.form
     user_repository = UserRepository()
     user_repository.register(form_data['firstName'], form_data['lastName'], form_data['email'], form_data['password'])
     return ""
 
 
-@app.route("/login-user", methods=["POST"])
+@user.route("/login-user", methods=["POST"])
 def login():
     form_data = json.loads(request.data)
     user_repository = UserRepository()
