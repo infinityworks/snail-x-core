@@ -23,7 +23,12 @@ class TestUserRepo(unittest.TestCase):
         ))
         self.assertEqual(response.status_code, 200)
 
-
+    def test_login_returns_200(self, mock_connect_db):
+        response = app.test_client().post('/login-user', data=dict(
+            email="test@example.com",
+            password="pass123"
+        ))
+        self.assertEqual(response.status_code, 200)
 
     @patch.object(UserRepository, 'register')
     def test_insert_db(self, mock_connect_db, mock_user_source):
