@@ -18,3 +18,20 @@ def set_new_user(user):
         return False
 
     return True
+
+def find_one_by_email(self, email):
+    db = get_db()
+    cursor = db.cursor(buffered=True)
+
+    sql = "select * from users where email = \'" + email + "\'"
+
+    print("sql: " + sql)
+
+    cursor.execute(sql)
+
+    db.commit()
+
+    user = db.fetchone()
+
+
+    return user
