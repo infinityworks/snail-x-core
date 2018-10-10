@@ -1,21 +1,33 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import RegisterComponent from "./views/register.vue"
-import IndexComponent from "./views/Index.vue"
+import RegisterComponent from "./components/auth/Register.vue"
+import HomeComponent from "./components/Home.vue"
+import LoginComponent from "./components/auth/Login.vue"
 
 Vue.use(Router);
 
 export default new Router({
-  routes: [
-    {
+    routes: [
+        {
             path: '/',
-            name: "index",
-            component: IndexComponent
+            name: "home",
+            component: HomeComponent
+        },
+        {
+            path: '/login',
+            name: "login",
+            component: LoginComponent,
+            meta: {
+                requiresVisitor: true
+            }
         },
         {
             path: "/register",
-            name: "register",
-            component: RegisterComponent
+            name: "Register.vue",
+            component: RegisterComponent,
+            meta: {
+                requiresVisitor: true
+            }
         }
-  ]
+    ]
 })

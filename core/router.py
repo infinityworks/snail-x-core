@@ -9,9 +9,14 @@ user = Blueprint('user', __name__)
 
 @user.route("/register-user", methods=["POST"])
 def register_user():
-    print("in")
     form_data = request.form
-    user = UserRepository()
-    user.register(form_data['firstName'], form_data['lastName'], form_data['email'], form_data['password'])
-
+    user_repository = UserRepository()
+    user_repository.register(form_data['firstName'], form_data['lastName'], form_data['email'], form_data['password'])
     return ""
+
+
+@user.route("/login-user", methods=["POST"])
+def login():
+    form_data = json.loads(request.data)
+    user_repository = UserRepository()
+    return json.dumps(user_repository.login(form_data['username'], form_data['password']))
