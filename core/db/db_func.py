@@ -24,6 +24,6 @@ def connect_to_database():
     return psycopg2.connect(
         host="localhost",
         user="root",
-        passwd="mysqlpasswd",
+        password="psqlpass",
         database = "snailRacing"
     )
