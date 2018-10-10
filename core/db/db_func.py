@@ -1,6 +1,5 @@
 from flask import g
 from core import app
-import mysql.connector
 import psycopg2
 
 
