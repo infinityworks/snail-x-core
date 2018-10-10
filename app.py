@@ -1,5 +1,5 @@
-from core.router import *
+from core import *
 
 if __name__ == '__main__':
-    user.run(host="0.0.0.0")
+    app.run(host="0.0.0.0")
 
