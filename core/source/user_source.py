@@ -33,4 +33,4 @@ def find_one_by_email(email):
         print(err)
         return False
 
-    return db.fetchone()
+    return cursor.fetchone()
