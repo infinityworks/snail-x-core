@@ -1,6 +1,6 @@
 from flask import g
 from core import app
-import mysql.connector
+import psycopg2
 
 
 def get_db():
@@ -21,9 +21,9 @@ def teardown_db():
 
 
 def connect_to_database():
-    return mysql.connector.connect(
+    return psycopg2.connect(
         host="localhost",
         user="root",
-        passwd="mysqlpasswd",
-        database="snailRacing"
+        password="psqlpass",
+        database = "snailRacing"
     )

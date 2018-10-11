@@ -1,13 +1,19 @@
 from core.db.db_func import get_db
+from werkzeug.security import generate_password_hash
+
+
+def hash_password(password):
+    return generate_password_hash(password)
 
 
 def set_new_user(user):
     db = get_db()
     cursor = db.cursor()
 
-    query = "INSERT INTO users (firstName, lastName, email, password) VALUES ('{}', '{}', '{}', '{}');"\
-        .format(
-            user.first_name, user.last_name, user.email, user.password
+    hashed_password = generate_password_hash(user.password)
+
+    query = "INSERT INTO users (firstName, lastName, email, password) VALUES ('{}', '{}', '{}', '{}');".format(
+            user.first_name, user.last_name, user.email, hashed_password
         )
 
     try:
