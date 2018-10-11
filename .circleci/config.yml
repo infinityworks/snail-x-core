@@ -49,7 +49,7 @@ jobs:
       - run:
           name: run tests
           command: |
-            python -m unittest discover /core/tests
+            python -m unittest discover core/tests -p 'test_*.py'
 
       - store_artifacts:
           path: test-reports
