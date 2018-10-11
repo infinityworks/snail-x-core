@@ -19,7 +19,22 @@ def set_new_user(user):
 
     return True
 
-def find_one_by_email(self, email):
+def email_is_duplicate(email):
+    db = get_db()
+    cursor = db.cursor()
+
+    sql = "select * from users where email = \'" + email + "\'"
+
+    cursor.execute(sql)
+
+    user = cursor.fetchone()
+
+    if user:
+        return "true"
+    else:
+        return "false"
+
+def find_one_by_email(email):
     db = get_db()
     cursor = db.cursor(buffered=True)
 
