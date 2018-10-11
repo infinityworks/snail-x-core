@@ -34,7 +34,7 @@ jobs:
             . venv/bin/activate
             pip3 install -r requirements.txt
             pip install flask-cors
-            pip install Flask
+            pip3 install flask
             pip install mock
 
       - save_cache:
