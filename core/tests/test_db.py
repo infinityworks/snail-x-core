@@ -1,7 +1,5 @@
 import unittest
 from unittest.mock import Mock
-
-from mock import patch
 # from core.db.db_func import get_db
 # from core.models.user import User
 from core.repositories.user_repository import UserRepository
