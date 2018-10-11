@@ -13,7 +13,7 @@ def get_db():
 
 
 @app.teardown_appcontext
-def teardown_db():
+def teardown_db(teardown):
     db = getattr(g, '_database', None)
 
     if db is not None:

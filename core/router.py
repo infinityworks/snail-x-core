@@ -23,7 +23,9 @@ def login():
     form_data = request.get_json()
     user_repository = UserRepository()
     account = user_repository.login(form_data['username'], form_data['password'])
+    print({ "message" : form_data['username'] }, status.HTTP_200_OK)
     if account:
-        return form_data['username']
+        content = { 'request_data' : form_data['username'] }
+        return content, status.HTTP_200_OK
     else:
         return {"message": "Invalid login details. Please try again."}, status.HTTP_401_UNAUTHORIZED

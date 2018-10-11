@@ -28,7 +28,7 @@ def set_new_user(user):
 
 def find_one_by_email(email):
     db = get_db()
-    cursor = db.cursor(buffered=True)
+    cursor = db.cursor()
 
     query = "select * from users where email = \'" + email + "\'"
 
@@ -36,6 +36,7 @@ def find_one_by_email(email):
         cursor.execute(query)
         db.commit()
     except db.Error as err:
+        print("hehrejnadwa")
         print(err)
         return False
 
