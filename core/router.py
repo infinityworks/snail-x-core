@@ -9,7 +9,7 @@ user = Blueprint('user', __name__)
 
 @user.route("/register-user", methods=["POST"])
 def register_user():
-    form_data = json.loads(request.data)
+    form_data = request.get_json()
     user_repository = UserRepository()
     success = user_repository.register(form_data['firstName'], form_data['lastName'], form_data['email'], form_data['password'])
     if success:
