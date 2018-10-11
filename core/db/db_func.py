@@ -26,4 +26,6 @@ def connect_to_database():
         user="isfktaipxvnmbp",
         password="d3405d7dede20bc84142a6e336c8b476067decd768ac5ee13ccea55fa065b10c",
         database = "d67lulaq5muhb8"
+        port='5432',
+        sslmode='require'
     )
