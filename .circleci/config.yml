@@ -50,6 +50,7 @@ jobs:
       - run:
           name: run tests
           command: |
+            . venv/bin/activate
             python -m unittest discover core/tests -p 'test_*.py'
 
       - store_artifacts:
