@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import Mock
+from mock import patch
 # from core.db.db_func import get_db
 # from core.models.user import User
 from core.repositories.user_repository import UserRepository
@@ -31,6 +32,7 @@ class TestUserRepo(unittest.TestCase):
             email="test@example.com",
             password="pass123"
         ))
+
         self.assertEqual(response.status_code, 200)
 
     @patch.object(UserRepository, 'register')

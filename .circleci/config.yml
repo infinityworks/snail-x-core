@@ -34,7 +34,7 @@ jobs:
             . venv/bin/activate
             pip3 install -r requirements.txt
             pip install flask-cors
-            pip install flask
+            pip install virtualenv
             pip install mock
 
       - save_cache:
@@ -50,6 +50,7 @@ jobs:
       - run:
           name: run tests
           command: |
+            . venv/bin/activate
             python -m unittest discover core/tests -p 'test_*.py'
 
       - store_artifacts:
