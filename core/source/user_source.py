@@ -36,7 +36,6 @@ def find_one_by_email(email):
         cursor.execute(query)
         db.commit()
     except db.Error as err:
-        print("hehrejnadwa")
         print(err)
         return False
 

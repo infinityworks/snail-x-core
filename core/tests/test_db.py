@@ -45,6 +45,5 @@ class TestUserRepo(unittest.TestCase):
             "pass123"
         )
 
-        mock_connect_db.a
 
         # self.assertEqual(expected_result, result)
