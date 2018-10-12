@@ -1,6 +1,6 @@
 from core.repositories.user_repository import UserRepository
 from flask import Blueprint, request
-import json
+from flask_api import status
 
 user = Blueprint('user', __name__)
 
@@ -9,14 +9,31 @@ user = Blueprint('user', __name__)
 
 @user.route("/register-user", methods=["POST"])
 def register_user():
-    form_data = json.loads(request.data)
+    form_data = request.get_json()
     user_repository = UserRepository()
-    user_repository.register(form_data['firstName'], form_data['lastName'], form_data['email'], form_data['password'])
-    return ""
+    success = user_repository.register(form_data['firstName'], form_data['lastName'], form_data['email'],
+                                       form_data['password'])
+    if success:
+        return {"message": "Successfully registered the user."}, status.HTTP_201_CREATED
+    else:
+        return {"message": "Failed registering the user with the supplied details."}, status.HTTP_400_BAD_REQUEST
+
+
+@user.route("/check-duplicate-email", methods=["POST"])
+def check_duplicate_email():
+    form_data = request.get_json()
+    user_repository = UserRepository()
+    return {"result": user_repository.check_email(form_data['email'])}, status.HTTP_200_OK
 
 
 @user.route("/login-user", methods=["POST"])
 def login():
-    form_data = json.loads(request.data)
+    form_data = request.get_json()
     user_repository = UserRepository()
-    return json.dumps(user_repository.login(form_data['username'], form_data['password']))
+    account = user_repository.login(form_data['email'], form_data['password'])
+    if account:
+        content = {'user_email': form_data['email'],
+                   'user_first_name': account[1]}
+        return content, status.HTTP_200_OK
+    else:
+        return {"message": "Invalid login details. Please try again."}, status.HTTP_401_UNAUTHORIZED
