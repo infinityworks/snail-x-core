@@ -30,9 +30,9 @@ def email_is_duplicate(email):
     user = cursor.fetchone()
 
     if user:
-        return "true"
+        return True
     else:
-        return "false"
+        return False
 
 def find_one_by_email(email):
     db = get_db()

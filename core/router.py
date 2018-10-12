@@ -19,7 +19,7 @@ def register_user():
 def check_duplicate_email():
     form_data = json.loads(request.data)
     user_repository = UserRepository()
-    return user_repository.check_email(form_data['email'])
+    return json.dumps(user_repository.check_email(form_data['email']))
 
 
 @user.route("/login-user", methods=["POST"])
