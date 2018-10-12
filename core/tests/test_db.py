@@ -1,19 +1,19 @@
-import unittest
-from unittest.mock import Mock
-from mock import patch
-# from core.db.db_func import get_db
-# from core.models.user import User
-from core.repositories.user_repository import UserRepository
-from core import app
-import json
-
-
-def not_a_db_hit():
-    print('I did not hit the db')
-
-
-@patch("core.db.db_func.connect_to_database")
-class TestUserRepo(unittest.TestCase):
+# import unittest
+# from unittest.mock import Mock
+# from mock import patch
+# # from core.db.db_func import get_db
+# # from core.models.user import User
+# from core.repositories.user_repository import UserRepository
+# from core import app
+# import json
+#
+#
+# def not_a_db_hit():
+#     print('I did not hit the db')
+#
+#
+# @patch("core.db.db_func.connect_to_database")
+# class TestUserRepo(unittest.TestCase):
 
     # def setUp(self):
     #     data = {}
