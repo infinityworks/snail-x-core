@@ -11,7 +11,8 @@ user = Blueprint('user', __name__)
 def register_user():
     form_data = request.get_json()
     user_repository = UserRepository()
-    success = user_repository.register(form_data['firstName'], form_data['lastName'], form_data['email'], form_data['password'])
+    success = user_repository.register(form_data['firstName'], form_data['lastName'], form_data['email'],
+                                       form_data['password'])
     if success:
         return {"message": "Successfully registered the user."}, status.HTTP_201_CREATED
     else:
@@ -22,10 +23,11 @@ def register_user():
 def login():
     form_data = request.get_json()
     user_repository = UserRepository()
-    account = user_repository.login(form_data['username'], form_data['password'])
-    print({ "message" : form_data['username'] }, status.HTTP_200_OK)
+    account = user_repository.login(form_data['email'], form_data['password'])
     if account:
-        content = { 'request_data' : form_data['username'] }
+        print(str(account[1]))
+        content = {'user_email': form_data['email'],
+                   'user_first_name': account[1]}
         return content, status.HTTP_200_OK
     else:
         return {"message": "Invalid login details. Please try again."}, status.HTTP_401_UNAUTHORIZED
