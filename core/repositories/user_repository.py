@@ -15,4 +15,4 @@ class UserRepository:
         if not user or not check_password_hash(user[3], user_password):
             return False
 
-        return user_email
+        return user
