@@ -1,6 +1,5 @@
 import unittest
 from unittest.mock import Mock
-from mock import patch
 # from core.db.db_func import get_db
 # from core.models.user import User
 from core.repositories.user_repository import UserRepository
@@ -27,7 +26,12 @@ class TestUserRepo(unittest.TestCase):
         response = app.test_client().post('/register-user', data=self.json_data)
         self.assertEqual(response.status_code, 200)
 
-
+    def test_login_returns_200(self, mock_connect_db):
+        response = app.test_client().post('/login-user', data=dict(
+            email="test@example.com",
+            password="pass123"
+        ))
+        self.assertEqual(response.status_code, 200)
 
     @patch.object(UserRepository, 'register')
     def test_insert_db(self, mock_connect_db, mock_user_source):
@@ -40,6 +44,7 @@ class TestUserRepo(unittest.TestCase):
             "pass123"
         )
 
+
     @patch.object(UserRepository, 'check_email', return_value=True)
     def test_insert_db(self, mock_connect_db, mock_user_source):
         json_email = {'email': 'test@example.com'}
@@ -50,4 +55,3 @@ class TestUserRepo(unittest.TestCase):
             "test@example.com"
         )
 
-        # self.assertEqual(expected_result, result)
