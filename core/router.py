@@ -9,7 +9,7 @@ user = Blueprint('user', __name__)
 
 @user.route("/register-user", methods=["POST"])
 def register_user():
-    form_data = json.loads(request.data)
+    form_data = request.get_json()
     user_repository = UserRepository()
     success = user_repository.register(form_data['firstName'], form_data['lastName'], form_data['email'],
                                        form_data['password'])
@@ -18,11 +18,12 @@ def register_user():
     else:
         return {"message": "Failed registering the user with the supplied details."}, status.HTTP_400_BAD_REQUEST
 
+
 @user.route("/check-duplicate-email", methods=["POST"])
 def check_duplicate_email():
-    form_data = json.loads(request.data)
+    form_data = request.get_json()
     user_repository = UserRepository()
-    return json.dumps(user_repository.check_email(form_data['email']))
+    return {"result": user_repository.check_email(form_data['email'])}, status.HTTP_200_OK
 
 
 @user.route("/login-user", methods=["POST"])
@@ -31,7 +32,6 @@ def login():
     user_repository = UserRepository()
     account = user_repository.login(form_data['email'], form_data['password'])
     if account:
-        print(str(account[1]))
         content = {'user_email': form_data['email'],
                    'user_first_name': account[1]}
         return content, status.HTTP_200_OK

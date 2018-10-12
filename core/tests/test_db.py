@@ -22,6 +22,7 @@ class TestUserRepo(unittest.TestCase):
         data['password'] = 'pass123'
         self.json_data = json.dumps(data)
 
+
     def test_register_returns_200(self, mock_connect_db):
         response = app.test_client().post('/register-user', data=self.json_data)
         self.assertEqual(response.status_code, 200)
