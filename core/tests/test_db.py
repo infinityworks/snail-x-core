@@ -46,7 +46,7 @@ class TestUserRepo(unittest.TestCase):
 
 
     @patch.object(UserRepository, 'check_email', return_value=True)
-    def test_insert_db(self, mock_connect_db, mock_user_source):
+    def test_check_email(self, mock_connect_db, mock_user_source):
         json_email = {'email': 'test@example.com'}
         internal_data = json.dumps(json_email)
         app.test_client().post('/check-duplicate-email', data=internal_data)

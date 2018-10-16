@@ -1,8 +1,10 @@
 from core.repositories.user_repository import UserRepository
+from core.repositories.round_repository import RoundRepository
 from flask import Blueprint, request
 from flask_api import status
 
 user = Blueprint('user', __name__)
+round = Blueprint('round', __name__)
 
 
 # <-- End Points Below -->
@@ -37,3 +39,8 @@ def login():
         return content, status.HTTP_200_OK
     else:
         return {"message": "Invalid login details. Please try again."}, status.HTTP_401_UNAUTHORIZED
+
+@round.route("/get-open-round", methods=["GET"])
+def get_open_round():
+    round_repository = RoundRepository()
+    return json.dumps(round_repository.get_open_round())
