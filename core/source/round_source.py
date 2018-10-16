@@ -6,13 +6,20 @@ def get_open_round():
     cursor = db.cursor()
     current_time = datetime.datetime.now()
 
-    sql = """SELECT * FROM round
-             INNER JOIN (SELECT * FROM races ORDER BY starttime ASC) AS racesData
-             ON round.ID = racesData.ID
-             WHERE round.start <= [current_datetime] AND race.raceDate >= [current_datetime]"""
+    print("HELLO")
 
-    cursor.execute(sql)
+    sql = """SELECT round.start, round.finish, round.roundname, round.prize  FROM round
+             INNER JOIN race
+             ON round.roundid = race.raceid
+             WHERE round.start <= %s
+             GROUP BY race.raceid, round.roundid HAVING MIN(race.racedate) >= %s"""
+
+    args = current_time, current_time
+
+    cursor.execute(sql, args)
 
     round = cursor.fetchone()
+
+    print(current_time)
 
     return round
