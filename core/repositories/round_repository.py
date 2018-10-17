@@ -1,7 +1,6 @@
-from core.source.round_source import get_open_round
+from core.source.round_source import get_open_round_details
 
 class RoundRepository:
 
-    def get_open_round(self):
-        print("HELLO1")
-        return get_open_round()
+    def get_open_round_details(self):
+        return get_open_round_details()
