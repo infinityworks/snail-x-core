@@ -41,7 +41,11 @@ def login():
     else:
         return {"message": "Invalid login details. Please try again."}, status.HTTP_401_UNAUTHORIZED
 
-@user.route("/get-open-round", methods=["POST"])
+@user.route("/get-open-round", methods=["GET"])
 def get_open_round():
     round_repository = RoundRepository()
-    return json.dumps(round_repository.get_open_round())
+    round_data = round_repository.get_open_round()
+    content = {'round_id': round_data[0],
+               'round_name': round_data[1],
+               'race_id_list': round_data[2]}
+    return content, status.HTTP_200_OK
