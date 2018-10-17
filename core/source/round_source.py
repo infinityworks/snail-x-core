@@ -8,18 +8,27 @@ def get_open_round():
 
     print("HELLO")
 
-    sql = """SELECT round.start, round.finish, round.roundname, round.prize  FROM round
-             INNER JOIN race
-             ON round.roundid = race.raceid
-             WHERE round.start <= %s
-             GROUP BY race.raceid, round.roundid HAVING MIN(race.racedate) >= %s"""
+    sql = """SELECT round.roundid, round.roundname, race.raceid 
+            FROM round JOIN race ON round.roundid = race.roundid 
+            WHERE round.start <= %s 
+            AND race.racedate >= %s"""
 
-    args = current_time, current_time
+    # args = current_time, current_time
+    args = ('2018-10-15 12:00:00', '2018-10-15 12:00:00')
 
     cursor.execute(sql, args)
 
-    round = cursor.fetchone()
+    raceIDs = []
+    first_row = cursor.fetchone()
+    round_ID = first_row[0]
+    round_name = first_row[1]
 
-    print(current_time)
+    for record in cursor:
+        raceIDs.append(record[2])
 
-    return round
+    print("PRINTING")
+    print(round_ID)
+    print(round_name)
+    print(raceIDs)
+
+    return round_ID, round_name, raceIDs
