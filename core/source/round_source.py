@@ -1,11 +1,11 @@
 from core.db.db_func import get_db
 
 
-def get_snail_name(snailid):
+def get_round_id():
     db = get_db()
     cursor = db.cursor()
 
-    query = "select name, trainerid from snails where snailid = \'" + str(snailid) + "\'"
+    query = "select roundid from round where status = 'Open'"
 
     try:
         cursor.execute(query)
