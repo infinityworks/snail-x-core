@@ -1,6 +1,7 @@
 from core.repositories.user_repository import UserRepository
 from flask import Blueprint, request
 from flask_api import status
+import json
 
 user = Blueprint('user', __name__)
 
@@ -33,7 +34,23 @@ def login():
     account = user_repository.login(form_data['email'], form_data['password'])
     if account:
         content = {'user_email': form_data['email'],
-                   'user_first_name': account[1]}
+                   'user_first_name': account[1]
+                   }
         return content, status.HTTP_200_OK
     else:
         return {"message": "Invalid login details. Please try again."}, status.HTTP_401_UNAUTHORIZED
+
+
+@user.route("/user-predictions", methods=["POST"])
+def get_predictions():
+    form_data = request.get_json()
+    user_repository = UserRepository()
+    predictions = user_repository.get_predictions(form_data['email'])
+
+    if predictions:
+        print(predictions)
+        return_data = json.dumps(predictions)
+        print(return_data)
+        return return_data, status.HTTP_200_OK
+    else:
+        return {"message": "Error. No predictions made"}, status.HTTP_204_NO_CONTENT
