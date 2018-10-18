@@ -56,3 +56,39 @@ def find_one_by_email(email):
         return False
 
     return cursor.fetchone()
+
+def get_id_by_email(email):
+    db = get_db()
+    cursor = db.cursor()
+
+    query = "select * from users where email = \'" + email + "\'"
+
+    try:
+        cursor.execute(query)
+        db.commit()
+    except db.Error as err:
+        print(err)
+        return False
+
+    user_data = cursor.fetchone()
+
+    print(user_data)
+
+
+    return user_data[0]
+
+
+def get_user_predictions(user_id):
+    db = get_db()
+    cursor = db.cursor()
+
+    query = "select raceid, snailid from racepredictions where userid = \'" + str(user_id) + "\';"
+
+    try:
+        cursor.execute(query)
+        db.commit()
+    except db.Error as err:
+        print(err)
+        return False
+
+    return cursor.fetchall()
