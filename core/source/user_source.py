@@ -12,7 +12,7 @@ def set_new_user(user):
 
     hashed_password = generate_password_hash(user.password)
 
-    query = "INSERT INTO users (firstName, lastName, email, password) VALUES ('{}', '{}', '{}', '{}');".format(
+    query = "INSERT INTO users (first_name, last_name, email, password) VALUES ('{}', '{}', '{}', '{}');".format(
             user.first_name, user.last_name, user.email, hashed_password
         )
 

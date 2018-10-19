@@ -12,7 +12,7 @@ round = Blueprint('round', __name__)
 
 @user.route("/register-user", methods=["POST"])
 def register_user():
-    form_data = json.loads(request.data)
+    form_data = request.get_json()
     user_repository = UserRepository()
     success = user_repository.register(form_data['firstName'], form_data['lastName'], form_data['email'],
                                        form_data['password'])
@@ -23,7 +23,7 @@ def register_user():
 
 @user.route("/check-duplicate-email", methods=["POST"])
 def check_duplicate_email():
-    form_data = json.loads(request.data)
+    form_data = request.get_json()
     user_repository = UserRepository()
     return json.dumps(user_repository.check_email(form_data['email']))
 
@@ -33,8 +33,8 @@ def login():
     form_data = request.get_json()
     user_repository = UserRepository()
     account = user_repository.login(form_data['email'], form_data['password'])
+
     if account:
-        print(str(account[1]))
         content = {'user_email': form_data['email'],
                    'user_first_name': account[1]}
         return content, status.HTTP_200_OK
@@ -47,6 +47,16 @@ def get_open_round():
     round_repository = RoundRepository()
     round_data = round_repository.get_open_round_details()
 
-    print(round_data)
-
     return json.dumps(round_data)
+
+@user.route("/store-predictions", methods=["POST"])
+def store_predictions():
+    predictions_data = request.get_json()
+    predictions_repository = RoundRepository()
+
+    success = predictions_repository.store_predictions(predictions_data['userEmail'], predictions_data['racePredictions'])
+
+    if success:
+        return {"message": "Successfully registered predictions."}, status.HTTP_201_CREATED
+    else:
+        return {"message": "Failed registering the predictions."}, status.HTTP_400_BAD_REQUEST

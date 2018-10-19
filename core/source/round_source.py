@@ -7,42 +7,42 @@ def get_open_round():
     cursor = db.cursor()
     current_time = datetime.datetime.now()
 
-    args = current_time, current_time
-    #args = ('2018-10-15 12:00:00', '2018-10-15 12:00:00')
+    args = (current_time, current_time)
 
-    sql = """SELECT round.roundid, round.roundname, race.raceid 
-            FROM round JOIN race ON round.roundid = race.roundid 
-            WHERE round.start <= %s 
-            AND race.racedate >= %s"""
+    sql = """SELECT round.round_id, round.round_name, race.race_id 
+            FROM round JOIN race ON round.round_id = race.round_id 
+            WHERE round.start_date <= %s 
+            AND race.race_date >= %s"""
 
     cursor.execute(sql, args)
 
     raceIDs = []
-    first_row = cursor.fetchone()
-    round_ID = first_row[0]
-    round_name = first_row[1]
+    round_ID = 0
+    round_name = ""
 
     for record in cursor:
         raceIDs.append(record[2])
-
-    #round_data = {"round_id": round_ID, "round_name": round_name, "race_IDs": raceIDs}
+        round_ID = record[0]
+        round_name = record[1]
 
     return round_ID, round_name, raceIDs
-    #return round_data
 
 
 def get_round_snails(race_IDs):
+
     db = get_db()
     cursor = db.cursor()
 
-    sql = """SELECT racecard.raceid, snails.snailid, snails.name AS snailName, trainers.name AS trainerName 
-            FROM racecard JOIN snails ON racecard.snailID = snails.snailID 
-            JOIN trainers ON snails.trainerID = trainers.trainerID 
-            WHERE racecard.raceid = ANY(%s);"""
+    print(race_IDs)
+    sql = """SELECT racecard.race_id, snails.snail_id, snails.name AS snailName, trainers.name AS trainerName 
+            FROM racecard JOIN snails ON racecard.snail_id = snails.snail_id 
+            JOIN trainers ON snails.trainer_id = trainers.trainer_id 
+            WHERE racecard.race_id = ANY(ARRAY{});""".format(race_IDs)
 
-    cursor.execute(sql, (race_IDs,))
+    cursor.execute(sql)
 
-    query_data = {}
+    temp_races_dict = {}
+    query_data = []
 
     for row in cursor:
         raceid = row[0]
@@ -50,13 +50,17 @@ def get_round_snails(race_IDs):
         snailname = row[2]
         trainername = row[3]
 
-        if raceid in query_data: # if snails for a particular race have already started being entered
-            races_dict = query_data[raceid] # get the already-created race dictionary for those snails
-        else:
-            races_dict = {}
+        temp_snails_obj = {"snail_id": snailid, "snail_name": snailname, "trainer_name": trainername}
 
-        races_dict[snailid] = (snailname, trainername)
-        query_data[raceid] = races_dict
+        if raceid in temp_races_dict:
+            temp_races_dict[raceid].append(temp_snails_obj)
+        else:
+            temp_races_dict[raceid] = []
+            temp_races_dict[raceid].append(temp_snails_obj)
+
+    for race in temp_races_dict:
+        race_obj = {"race_id": race, "race_data": temp_races_dict[race]}
+        query_data.append(race_obj)
 
     return query_data
 
@@ -64,9 +68,30 @@ def get_round_snails(race_IDs):
 def get_open_round_details():
     round_ID, round_name, race_IDs = get_open_round()
     races_snails_info = get_round_snails(race_IDs)
-    round_details = {"roundid": round_ID, "roundname": round_name, "races": races_snails_info}
+    round_details = {"round_id": round_ID, "round_name": round_name, "races": races_snails_info}
 
     return round_details
+
+
+def store_predictions(user_id, race_predictions):
+    db = get_db()
+    cursor = db.cursor()
+    snail_race_list = []
+    for race_id in race_predictions:
+        snail_race_tuple = (race_id, user_id, race_predictions[race_id], datetime.datetime.now())
+        snail_race_list.append(snail_race_tuple)
+
+    sql = "INSERT INTO racepredictions (race_id, user_id, snail_id, created) VALUES (%s, %s, %s, %s);"
+
+    try:
+        cursor.executemany(sql, snail_race_list)
+        db.commit()
+    except db.Error as err:
+        print("Error writing to DB: {}".format(err))
+        return False
+
+    return True
+
 
 
 
