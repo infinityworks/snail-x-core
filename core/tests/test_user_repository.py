@@ -1,11 +1,25 @@
 import unittest
-from core.source.user_source import hash_password
-import psycopg2
-#
+from unittest.mock import Mock
+from unittest.mock import patch, MagicMock
+from core.db.db_func import get_db
+from core.source.trainer_source import get_trainer_name
+from core.source.snail_source import get_snail_name
+from core.models.user import User
+from core.repositories.user_repository import UserRepository
+from core.source.user_source import get_user_predictions
+from core import app
+import json
+
+
 class TestUserRepo(unittest.TestCase):
 
+    @patch("core.db.db_func.connect_to_database")
+    @patch.object(UserRepository, "get_user_from_db", MagicMock(return_value="[(1,)]"))
+    @patch.object(UserRepository, "get_round_from_db", MagicMock(return_value="[(1,)]"))
+    @patch.object(UserRepository, "get_predictions_from_db", MagicMock(return_value=[(4, 3)]))
+    @patch.object(UserRepository, "get_snail_name_from_db", MagicMock(return_value="[('Christian Snale', 2)]"))
+    @patch.object(UserRepository, "get_trainer_name_from_db", MagicMock(return_value="[('James',)]"))
+    def test_get_predictions(self, db_connection):
+        result = UserRepository().get_predictions('testing@example.com')
 
-     def test_register_sql_statement(self):
-         result = len(hash_password("aaa"))
-         self.assertEqual(93, result)
-
+        self.assertEqual(result, [[4, 3, '[', "[('James',)]", '[(1,)]']])

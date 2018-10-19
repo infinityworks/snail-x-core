@@ -23,20 +23,29 @@ class UserRepository:
         return user
 
     def get_predictions(self, email):
-        user_id = get_id_by_email(email)
-        round_id = get_round_id()
-        predictions = get_user_predictions(user_id, round_id)
-        print(predictions)
+        user_id = self.get_user_from_db(email)
+        round_id = self.get_round_from_db()
+        predictions = self.get_predictions_from_db(user_id, round_id)
         return_predictions = []
 
-
         for prediction in predictions:
-            snail = get_snail_name(prediction[1])
-            trainer = get_trainer_name(snail[0][1])
+            snail = self.get_snail_name_from_db(prediction[1])
+            trainer = self.get_trainer_name_from_db(snail[0][1])
             return_predictions.append([prediction[0], prediction[1], snail[0][0], trainer, round_id])
-
 
         return return_predictions
 
+    def get_user_from_db(self, email):
+        return get_id_by_email(email)
 
+    def get_round_from_db(self):
+        return get_round_id()
 
+    def get_predictions_from_db(self, user_id, email):
+        return get_user_predictions(user_id, email)
+
+    def get_snail_name_from_db(self, prediction):
+        return get_snail_name(prediction)
+
+    def get_trainer_name_from_db(self, snail):
+        return get_trainer_name(snail)
