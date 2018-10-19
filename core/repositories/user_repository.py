@@ -30,6 +30,7 @@ class UserRepository:
 
         for prediction in predictions:
             snail = self.get_snail_name_from_db(prediction[1])
+            print(snail)
             trainer = self.get_trainer_name_from_db(snail[0][1])
             return_predictions.append([prediction[0], prediction[1], snail[0][0], trainer, round_id])
 

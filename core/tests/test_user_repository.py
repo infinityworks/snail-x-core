@@ -14,12 +14,12 @@ import json
 class TestUserRepo(unittest.TestCase):
 
     @patch("core.db.db_func.connect_to_database")
-    @patch.object(UserRepository, "get_user_from_db", MagicMock(return_value="[(1,)]"))
-    @patch.object(UserRepository, "get_round_from_db", MagicMock(return_value="[(1,)]"))
+    @patch.object(UserRepository, "get_user_from_db", MagicMock(return_value=[(1,)]))
+    @patch.object(UserRepository, "get_round_from_db", MagicMock(return_value=[(1,)]))
     @patch.object(UserRepository, "get_predictions_from_db", MagicMock(return_value=[(4, 3)]))
-    @patch.object(UserRepository, "get_snail_name_from_db", MagicMock(return_value="[('Christian Snale', 2)]"))
-    @patch.object(UserRepository, "get_trainer_name_from_db", MagicMock(return_value="[('James',)]"))
+    @patch.object(UserRepository, "get_snail_name_from_db", MagicMock(return_value=[('Christian Snail', 1)]))
+    @patch.object(UserRepository, "get_trainer_name_from_db", MagicMock(return_value=[('James',)]))
     def test_get_predictions(self, db_connection):
         result = UserRepository().get_predictions('testing@example.com')
-
-        self.assertEqual(result, [[4, 3, '[', "[('James',)]", '[(1,)]']])
+        print(result)
+        self.assertEqual([[4, 3, 'Christian Snail', [('James',)], [(1,)]]], result)
