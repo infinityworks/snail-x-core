@@ -5,7 +5,7 @@ def get_round_id():
     db = get_db()
     cursor = db.cursor()
 
-    query = "select roundid from round where status = 'Open'"
+    query = "select round_id from round where status = 'Open'"
 
     try:
         cursor.execute(query)
