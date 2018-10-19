@@ -12,7 +12,7 @@ def set_new_user(user):
 
     hashed_password = generate_password_hash(user.password)
 
-    query = "INSERT INTO users (firstName, lastName, email, password) VALUES ('{}', '{}', '{}', '{}');".format(
+    query = "INSERT INTO users (first_Name, last_Name, email, password) VALUES ('{}', '{}', '{}', '{}');".format(
             user.first_name, user.last_name, user.email, hashed_password
         )
 
@@ -56,3 +56,38 @@ def find_one_by_email(email):
         return False
 
     return cursor.fetchone()
+
+def get_id_by_email(email):
+    db = get_db()
+    cursor = db.cursor()
+
+    query = "select * from users where email = \'" + str(email) + "\'"
+
+    try:
+        cursor.execute(query)
+        db.commit()
+    except db.Error as err:
+        print(err)
+        return False
+
+    user_data = cursor.fetchone()
+
+    print(user_data)
+
+
+    return user_data[0]
+
+
+def get_user_predictions(user_id, round_id):
+    db = get_db()
+    cursor = db.cursor()
+    query = "SELECT racepredictions.race_id, racepredictions.snail_id FROM racepredictions JOIN race ON racepredictions.race_id = race.race_id WHERE user_id = \'" + str(user_id) + "\' AND round_id = \'" + str(round_id[0][0]) + "\';"
+    print(query)
+    try:
+        cursor.execute(query)
+        db.commit()
+    except db.Error as err:
+        print(err)
+        return False
+
+    return cursor.fetchall()
