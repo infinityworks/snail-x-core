@@ -24,15 +24,16 @@ class UserRepository:
 
     def get_predictions(self, email):
         user_id = get_id_by_email(email)
-        predictions = get_user_predictions(user_id)
-        roundid = get_round_id()
+        round_id = get_round_id()
+        predictions = get_user_predictions(user_id, round_id)
+        print(predictions)
         return_predictions = []
 
 
         for prediction in predictions:
             snail = get_snail_name(prediction[1])
             trainer = get_trainer_name(snail[0][1])
-            return_predictions.append([prediction[0], prediction[1], snail[0][0], trainer, roundid])
+            return_predictions.append([prediction[0], prediction[1], snail[0][0], trainer, round_id])
 
 
         return return_predictions
