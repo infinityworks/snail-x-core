@@ -2,6 +2,10 @@ from core.db.db_func import get_db
 import datetime
 
 
+# def get_open_round_and_races():
+#     open_round = get_open_round()
+#     round_name, race_IDs = get_round_races()
+
 def get_open_round():   # Returns the round_id, round_name oof the current open round, as well as a list of the race_ids of the races
                         # in that round
     db, cursor = database_connect()
