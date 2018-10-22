@@ -4,8 +4,8 @@ import datetime
 
 def get_open_round():   # Returns the round_id, round_name oof the current open round, as well as a list of the race_ids of the races
                         # in that round
-    db = get_db()
-    cursor = db.cursor()
+    db, cursor = database_connect()
+
     current_time = datetime.datetime.now()
 
     args = (current_time, current_time)
@@ -32,8 +32,7 @@ def get_open_round():   # Returns the round_id, round_name oof the current open 
 def get_round_snails(race_IDs): # returns a list of objects, each of which contains a race id and a race_data object, each of
                                 # each of which specifies a snail id, snail name and trainer name of that snail
 
-    db = get_db()
-    cursor = db.cursor()
+    db, cursor = database_connect()
 
     sql = """SELECT racecard.race_id, snails.snail_id, snails.name AS snailName, trainers.name AS trainerName 
             FROM racecard JOIN snails ON racecard.snail_id = snails.snail_id 
@@ -76,8 +75,8 @@ def get_open_round_details():   # Returns an object specifying a the round id an
 
 
 def store_predictions(user_id, race_predictions):   # Inserts the user's predictions in to the racepredictions table
-    db = get_db()
-    cursor = db.cursor()
+    db, cursor = database_connect()
+
     snail_race_list = []
     for race_id in race_predictions:
         snail_race_tuple = (race_id, user_id, race_predictions[race_id], datetime.datetime.now())
@@ -94,8 +93,10 @@ def store_predictions(user_id, race_predictions):   # Inserts the user's predict
 
     return True
 
-
-
+def database_connect():
+    db = get_db()
+    cursor = db.cursor()
+    return db, cursor
 
 
 
