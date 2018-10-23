@@ -2,23 +2,13 @@ from core.db.db_func import get_db
 import datetime
 
 
-def get_round_id():
-    db = get_db()
-    cursor = db.cursor()
+def get_open_round_id():
+    round_ID, round_name, race_IDs = get_open_round()
 
-    query = "SELECT round_id FROM round WHERE status = 'Open'"
-
-    try:
-        cursor.execute(query)
-        db.commit()
-    except db.Error as err:
-        print(err)
-        return False
-
-    return cursor.fetchall()
+    return round_ID
 
 
-def get_open_round():   # Returns the round_id, round_name oof the current open round, as well as a list of the race_ids of the races
+def get_open_round():   # Returns the round_id, round_name of the current open round, as well as a list of the race_ids of the races
                         # in that round
     db, cursor = database_connect()
 

@@ -51,9 +51,7 @@ def get_predictions():
     predictions = user_repository.get_predictions(form_data['email'])
 
     if predictions:
-        print(predictions)
         return_data = json.dumps(predictions)
-        print(return_data)
         return return_data, status.HTTP_200_OK
     else:
         return {"message": "Error. No predictions made"}, status.HTTP_204_NO_CONTENT

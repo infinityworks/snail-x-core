@@ -79,8 +79,12 @@ def get_id_by_email(email):
 def get_user_predictions(user_id, round_id):
     db = get_db()
     cursor = db.cursor()
-    query = "SELECT racepredictions.race_id, racepredictions.snail_id FROM racepredictions JOIN race ON racepredictions.race_id = race.race_id WHERE user_id = \'" + str(user_id) + "\' AND round_id = \'" + str(round_id[0][0]) + "\';"
-    print(query)
+    query = "SELECT racepredictions.race_id, " \
+            "       racepredictions.snail_id " \
+            "FROM racepredictions " \
+            "JOIN race ON racepredictions.race_id = race.race_id " \
+            "WHERE user_id = \'" + str(user_id) + "\' AND round_id = \'" + str(round_id) + "\';"
+
     try:
         cursor.execute(query)
         db.commit()
