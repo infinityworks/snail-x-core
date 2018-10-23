@@ -24,7 +24,8 @@ def register_user():
 def check_duplicate_email():
     form_data = request.get_json()
     user_repository = UserRepository()
-    return {"result": user_repository.check_email(form_data['email'])}, status.HTTP_200_OK
+    is_duplicate_email = user_repository.check_is_email_duplicate(form_data['email'])
+    return {"result": is_duplicate_email}, status.HTTP_200_OK
 
 
 @user.route("/login-user", methods=["POST"])
@@ -48,9 +49,7 @@ def get_predictions():
     predictions = user_repository.get_predictions(form_data['email'])
 
     if predictions:
-        print(predictions)
         return_data = json.dumps(predictions)
-        print(return_data)
         return return_data, status.HTTP_200_OK
     else:
         return {"message": "Error. No predictions made"}, status.HTTP_204_NO_CONTENT

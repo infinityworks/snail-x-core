@@ -13,8 +13,8 @@ def set_new_user(user):
     hashed_password = generate_password_hash(user.password)
 
     query = "INSERT INTO users (first_Name, last_Name, email, password) VALUES ('{}', '{}', '{}', '{}');".format(
-            user.first_name, user.last_name, user.email, hashed_password
-        )
+        user.first_name, user.last_name, user.email, hashed_password
+    )
 
     try:
         cursor.execute(query)
@@ -26,7 +26,7 @@ def set_new_user(user):
     return True
 
 
-def email_is_duplicate(email):
+def check_is_email_duplicate(email):
     db = get_db()
     cursor = db.cursor()
 
@@ -57,6 +57,7 @@ def find_one_by_email(email):
 
     return cursor.fetchone()
 
+
 def get_id_by_email(email):
     db = get_db()
     cursor = db.cursor()
@@ -72,17 +73,15 @@ def get_id_by_email(email):
 
     user_data = cursor.fetchone()
 
-    print(user_data)
-
-
     return user_data[0]
 
 
 def get_user_predictions(user_id, round_id):
     db = get_db()
     cursor = db.cursor()
-    query = "SELECT racepredictions.race_id, racepredictions.snail_id FROM racepredictions JOIN race ON racepredictions.race_id = race.race_id WHERE user_id = \'" + str(user_id) + "\' AND round_id = \'" + str(round_id[0][0]) + "\';"
-    print(query)
+    query = "SELECT racepredictions.race_id, racepredictions.snail_id FROM racepredictions JOIN race ON racepredictions.race_id = race.race_id WHERE user_id = \'" + str(
+        user_id) + "\' AND round_id = \'" + str(round_id[0][0]) + "\';"
+
     try:
         cursor.execute(query)
         db.commit()

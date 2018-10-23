@@ -1,9 +1,11 @@
 from core.models.user import User
-from core.source.user_source import set_new_user, find_one_by_email, email_is_duplicate, get_id_by_email, get_user_predictions
+from core.source.user_source import set_new_user, find_one_by_email, check_is_email_duplicate, get_id_by_email, \
+    get_user_predictions
 from werkzeug.security import check_password_hash
 from core.source.snail_source import get_snail_name
 from core.source.trainer_source import get_trainer_name
 from core.source.round_source import get_round_id
+
 
 class UserRepository:
 
@@ -11,8 +13,8 @@ class UserRepository:
         user = User(first_name, last_name, email, password)
         return set_new_user(user)
 
-    def check_email(self, email):
-        return email_is_duplicate(email)
+    def check_is_email_duplicate(self, email):
+        return check_is_email_duplicate(email)
 
     def login(self, user_email, user_password):
         user = find_one_by_email(user_email)
