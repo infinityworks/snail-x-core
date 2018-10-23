@@ -12,7 +12,7 @@ def set_new_user(user):
 
     hashed_password = generate_password_hash(user.password)
 
-    query = "INSERT INTO users (first_Name, last_Name, email, password) VALUES ('{}', '{}', '{}', '{}');".format(
+    query = "INSERT INTO users (first_name, last_name, email, password) VALUES ('{}', '{}', '{}', '{}');".format(
             user.first_name, user.last_name, user.email, hashed_password
         )
 
@@ -57,11 +57,12 @@ def find_one_by_email(email):
 
     return cursor.fetchone()
 
+
 def get_id_by_email(email):
     db = get_db()
     cursor = db.cursor()
 
-    query = "select * from users where email = \'" + str(email) + "\'"
+    query = "SELECT * FROM users WHERE email = \'" + str(email) + "\'"
 
     try:
         cursor.execute(query)
@@ -71,9 +72,6 @@ def get_id_by_email(email):
         return False
 
     user_data = cursor.fetchone()
-
-    print(user_data)
-
 
     return user_data[0]
 
