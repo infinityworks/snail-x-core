@@ -1,6 +1,7 @@
 from core.db.db_func import get_db
 from datetime import datetime
 
+
 def get_round_id():
     db = get_db()
     cursor = db.cursor()
@@ -8,12 +9,12 @@ def get_round_id():
     current_time = datetime.now()
     args = (current_time, current_time)
     query = """SELECT round.round_id 
-            FROM round JOIN race ON round.round_id = race.round_id 
+            FROM round JOIN race ON round.round_id = race.round_id                                           
             WHERE round.start_date <= '{}' 
             AND race.race_date >= '{}'""".format(current_time, current_time)
 
     try:
-        cursor.execute(query, args)   # inserts the current date and time in to the above SQL query
+        cursor.execute(query, args)  # inserts the current date and time in to the above SQL query
         db.commit()
     except db.Error as err:
         print(err)
