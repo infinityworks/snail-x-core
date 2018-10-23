@@ -62,7 +62,7 @@ def get_id_by_email(email):
     db = get_db()
     cursor = db.cursor()
 
-    query = "select * from users where email = \'" + str(email) + "\'"
+    query = "SELECT * FROM users WHERE email = \'" + str(email) + "\'"
 
     try:
         cursor.execute(query)
