@@ -64,6 +64,18 @@ def get_open_round():
 
     return json.dumps(round_data)
 
+@user.route("/get-current-round-results", methods=["GET"])
+def get_current_race_results():
+    round_repo = RoundRepository()
+    results = round_repo.get_current_round_race_results()
+    print(results)
+
+    if results:
+        return_data = json.dumps(results)
+        return return_data, status.HTTP_200_OK
+    else:
+        return {"message": "Error. No current round results"}, status.HTTP_204_NO_CONTENT
+
 @user.route("/store-predictions", methods=["POST"])
 def store_predictions():
     predictions_data = request.get_json()
