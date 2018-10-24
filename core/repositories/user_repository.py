@@ -3,7 +3,7 @@ from core.source.user_source import set_new_user, find_one_by_email, email_is_du
 from werkzeug.security import check_password_hash
 from core.source.snail_source import get_snail_name
 from core.source.trainer_source import get_trainer_name
-from core.source.round_source import get_round_id
+from core.source.round_source import get_open_round_id
 
 class UserRepository:
 
@@ -43,7 +43,7 @@ class UserRepository:
         return get_id_by_email(email)
 
     def get_round_from_db(self):
-        return get_round_id()
+        return get_open_round_id()
 
     def get_predictions_from_db(self, user_id, email):
         return get_user_predictions(user_id, email)
