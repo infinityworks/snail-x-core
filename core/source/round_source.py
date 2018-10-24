@@ -1,5 +1,4 @@
 from core.db.db_func import get_db
-from core.repositories.round_repositry import get_current_round_race_results
 from datetime import datetime
 
 
