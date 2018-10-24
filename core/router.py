@@ -56,25 +56,14 @@ def get_predictions():
     else:
         return {"message": "Error. No predictions made"}, status.HTTP_204_NO_CONTENT
 
-      
-@user.route("/get-current-round-results", methods=["GET"])
-def get_current_race_results():
-    results = RoundRepository.get_current_round_race_results()
-    print(results)
 
-    if results:
-        return_data = json.dumps(results)
-        return return_data, status.HTTP_200_OK
-    else:
-        return {"message": "Error. No current round results"}, status.HTTP_204_NO_CONTENT
-
-      
 @user.route("/get-open-round", methods=["GET"])
 def get_open_round():
     round_repository = RoundRepository()
     round_data = round_repository.get_open_round_details()
 
     return json.dumps(round_data)
+
 
 @user.route("/get-current-round-results", methods=["GET"])
 def get_current_race_results():
@@ -88,12 +77,14 @@ def get_current_race_results():
     else:
         return {"message": "Error. No current round results"}, status.HTTP_204_NO_CONTENT
 
+
 @user.route("/store-predictions", methods=["POST"])
 def store_predictions():
     predictions_data = request.get_json()
     predictions_repository = RoundRepository()
 
-    success = predictions_repository.store_predictions(predictions_data['userEmail'], predictions_data['racePredictions'])
+    success = predictions_repository.store_predictions(
+        predictions_data['userEmail'], predictions_data['racePredictions'])
 
     if success:
         return {"message": "Successfully registered predictions."}, status.HTTP_201_CREATED
