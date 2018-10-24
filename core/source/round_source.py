@@ -12,7 +12,7 @@ def get_round_id():
     db = get_db()
     cursor = db.cursor()
 
-    current_time = datetime.now()
+    current_time = datetime.datetime.now()
     args = (current_time, current_time)
     query = """SELECT round.round_id 
             FROM round JOIN race ON round.round_id = race.round_id                                           
@@ -29,24 +29,46 @@ def get_round_id():
     return cursor.fetchall()
 
 
-def get_latest_round():
-    print("db")
+def find_open_round_id():
+    print("find_open_round_id")
     db = get_db()
     cursor = db.cursor()
+    current_time = datetime.datetime.now()
 
-    query = "SELECT * FROM round ORDER BY round_id DESC LIMIT 1"
+    # THIS NEEEDS CHECKING BY AN SQL WIZARD
 
-    print(cursor)
+    query = """SELECT round.round_id
+            FROM round JOIN race ON round.round_id = race.round_id 
+            WHERE race.race_date = (SELECT MIN (race_date) FROM race) AND round.start_date <= '{}' 
+            AND race.race_date >= '{}' ORDER BY race.race_date ASC""".format(current_time, current_time)
 
     try:
         cursor.execute(query)
         db.commit()
-    except db.Error as err:
-        print("AWdawdw")
-        print(err)
+    except db.Error:
         return False
 
-    return cursor.fetchall()
+    return cursor.fetchone()
+
+def find_inflight_round_id():
+    db = get_db()
+    cursor = db.cursor()
+    current_time = datetime.datetime.now()
+
+    # THIS NEEEDS CHECKING BY AN SQL WIZARD
+
+    query = """SELECT round.round_id
+            FROM round JOIN race ON round.round_id = race.round_id 
+            WHERE race.race_date = (SELECT MIN (race_date) FROM race) AND round.closed = FALSE
+            AND race.race_date <= '{}' ORDER BY race.race_date ASC""".format(current_time, current_time)
+
+    try:
+        cursor.execute(query)
+        db.commit()
+    except db.Error:
+        return False
+
+    return cursor.fetchone()
 
 
 def get_open_round():  # Returns the round_id, round_name of the current open round, as well as a list of the race_ids of the races
@@ -156,7 +178,7 @@ def get_future_round_details():
 
     current_time = datetime.datetime.now()
     args = str(current_time)
-    sql = "SELECT start_date FROM round WHERE status != 'Closed' AND start_date > %s"
+    sql = "SELECT start_date FROM round WHERE start_date > %s"
 
     cursor.execute(sql, (args,))
 

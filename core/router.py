@@ -85,4 +85,6 @@ def check_future_rounds():
     round_repository = RoundRepository()
     future_round_data = round_repository.check_future_round()
 
+    print("RARR")
+    print(future_round_data)
     return json.dumps(future_round_data)

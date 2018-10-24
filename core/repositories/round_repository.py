@@ -8,24 +8,18 @@ from core.source.round_source import get_future_round_details
 
 
 class RoundRepository:
-    def find_open_round_or_future_round(self):
-        latest_round = round_source.get_latest_round()
 
-        print("3 : " + latest_round)
+    def get_is_open_round(self):
+        round_id = round_source.find_open_round_id()
+        if round_id:
+            return True
+        return False
 
-        current_date = time.time()
-        if latest_round:
-            round = round_mapper.map_sql_round_to_round_model(latest_round)
-            if not round:
-                print("BIG OL ERROR")
-                return False
-
-            if round.start_date() < current_date:
-                return round.start_date
-            elif round.start_date > current_date and round.end_date > current_date:
-                return True
-        else:
-            return False
+    def get_is_inflight_round(self):
+        round_id = round_source.find_inflight_round_id()
+        if round_id:
+            return True
+        return False
 
     def get_open_round_details(self):
         return get_open_round_details()
