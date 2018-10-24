@@ -68,6 +68,7 @@ def get_round_snails(race_IDs): # returns a list of objects, each of which conta
         race_obj = {"race_id": race, "race_data": temp_races_dict[race]}
         query_data.append(race_obj)
 
+<<<<<<< HEAD
     return query_data
 
 
