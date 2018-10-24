@@ -5,8 +5,9 @@ from flask_api import FlaskAPI
 # Setting up the flask end point to call data from front end to
 app = FlaskAPI(__name__)
 CORS(app)
-app.debug = True
 
 from core.router import user
+from core.router import round
 
 app.register_blueprint(user)
+app.register_blueprint(round)
