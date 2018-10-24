@@ -1,10 +1,11 @@
 from core.repositories.user_repository import UserRepository
-from core.repositories.round_repository import get_current_round_race_results
+from core.repositories.round_repository import RoundRepository
 from flask import Blueprint, request
 from flask_api import status
 import json
 
 user = Blueprint('user', __name__)
+round = Blueprint('round', __name__)
 
 
 # <-- End Points Below -->
@@ -33,6 +34,7 @@ def login():
     form_data = request.get_json()
     user_repository = UserRepository()
     account = user_repository.login(form_data['email'], form_data['password'])
+
     if account:
         content = {'user_email': form_data['email'],
                    'user_first_name': account[1]
@@ -49,16 +51,15 @@ def get_predictions():
     predictions = user_repository.get_predictions(form_data['email'])
 
     if predictions:
-        print(predictions)
         return_data = json.dumps(predictions)
-        print(return_data)
         return return_data, status.HTTP_200_OK
     else:
         return {"message": "Error. No predictions made"}, status.HTTP_204_NO_CONTENT
 
+      
 @user.route("/get-current-round-results", methods=["GET"])
 def get_current_race_results():
-    results = get_current_round_race_results()
+    results = RoundRepository.get_current_round_race_results()
     print(results)
 
     if results:
@@ -66,3 +67,31 @@ def get_current_race_results():
         return return_data, status.HTTP_200_OK
     else:
         return {"message": "Error. No current round results"}, status.HTTP_204_NO_CONTENT
+
+      
+@user.route("/get-open-round", methods=["GET"])
+def get_open_round():
+    round_repository = RoundRepository()
+    round_data = round_repository.get_open_round_details()
+
+    return json.dumps(round_data)
+
+@user.route("/store-predictions", methods=["POST"])
+def store_predictions():
+    predictions_data = request.get_json()
+    predictions_repository = RoundRepository()
+
+    success = predictions_repository.store_predictions(predictions_data['userEmail'], predictions_data['racePredictions'])
+
+    if success:
+        return {"message": "Successfully registered predictions."}, status.HTTP_201_CREATED
+    else:
+        return {"message": "Failed registering the predictions."}, status.HTTP_400_BAD_REQUEST
+
+
+@user.route("/check-future-rounds", methods=["GET"])
+def check_future_rounds():
+    round_repository = RoundRepository()
+    future_round_data = round_repository.check_future_round()
+
+    return json.dumps(future_round_data)

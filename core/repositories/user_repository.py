@@ -25,6 +25,7 @@ class UserRepository:
     def get_predictions(self, email):
         user_id = self.get_user_from_db(email)
         round_id = self.get_round_from_db()
+
         if not round_id:
             return_predictions = ["No Open Round"]
             return return_predictions
@@ -45,8 +46,8 @@ class UserRepository:
     def get_round_from_db(self):
         return get_open_round_id()
 
-    def get_predictions_from_db(self, user_id, email):
-        return get_user_predictions(user_id, email)
+    def get_predictions_from_db(self, user_id, round_id):
+        return get_user_predictions(user_id, round_id)
 
     def get_snail_name_from_db(self, prediction):
         return get_snail_name(prediction)
