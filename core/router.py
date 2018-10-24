@@ -56,7 +56,19 @@ def get_predictions():
     else:
         return {"message": "Error. No predictions made"}, status.HTTP_204_NO_CONTENT
 
+      
+@user.route("/get-current-round-results", methods=["GET"])
+def get_current_race_results():
+    results = RoundRepository.get_current_round_race_results()
+    print(results)
 
+    if results:
+        return_data = json.dumps(results)
+        return return_data, status.HTTP_200_OK
+    else:
+        return {"message": "Error. No current round results"}, status.HTTP_204_NO_CONTENT
+
+      
 @user.route("/get-open-round", methods=["GET"])
 def get_open_round():
     round_repository = RoundRepository()
