@@ -1,4 +1,6 @@
 from core.repositories.user_repository import UserRepository
+from core.repositories.round_repositry import get_current_round_race_results
+from core.source.round_source import get_snail_name_results
 from flask import Blueprint, request
 from flask_api import status
 import json
@@ -43,14 +45,25 @@ def login():
 
 @user.route("/user-predictions", methods=["POST"])
 def get_predictions():
+    get_snail_name_results()
     form_data = request.get_json()
     user_repository = UserRepository()
     predictions = user_repository.get_predictions(form_data['email'])
 
     if predictions:
-        print(predictions)
         return_data = json.dumps(predictions)
-        print(return_data)
         return return_data, status.HTTP_200_OK
     else:
         return {"message": "Error. No predictions made"}, status.HTTP_204_NO_CONTENT
+
+
+@user.route("/get-current-round-results", methods=["GET"])
+def get_current_race_results():
+    results = get_current_round_race_results()
+    print(results)
+
+    if results:
+        return_data = json.dumps(results)
+        return return_data, status.HTTP_200_OK
+    else:
+        return {"message": "Error. No current round results"}, status.HTTP_204_NO_CONTENT
