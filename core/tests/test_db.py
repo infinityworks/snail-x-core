@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # import unittest
 # from unittest.mock import Mock
 # from mock import patch
@@ -58,7 +57,7 @@
     #     mock_connect_db.assert_called_once_with(
     #         "test@example.com"
     #     )
-=======
+
 import unittest
 from unittest.mock import Mock
 # from core.db.db_func import get_db
@@ -115,5 +114,5 @@ class TestUserRepo(unittest.TestCase):
         mock_connect_db.assert_called_once_with(
             "test@example.com"
         )
->>>>>>> f90046a843b766c2d4bbd0ae3b3444253e3b1690
+
 
