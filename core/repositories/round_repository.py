@@ -6,13 +6,13 @@ from core.source.user_source import find_one_by_email
 class RoundRepository:
 
     def get_is_open_round(self):
-        round_id = round_source.find_open_round_id()
+        round_id = round_source.get_open_round_id()
         if round_id:
             return True
         return False
 
     def get_is_inflight_round(self):
-        round_id = round_source.find_inflight_round_id()
+        round_id = round_source.get_inflight_round_id()
         if round_id:
             return True
         return False
