@@ -5,8 +5,15 @@ import datetime
 # def get_open_round_and_races():
 #     open_round = get_open_round()
 #     round_name, race_IDs = get_round_races()
+  # Returns the round_id, round_name oof the current open round, as well as a list of the race_ids of the races
 
-def get_open_round():   # Returns the round_id, round_name oof the current open round, as well as a list of the race_ids of the races
+def get_open_round_id():
+    round_ID, round_name, race_IDs = get_open_round()
+
+    return round_ID
+
+
+def get_open_round():   # Returns the round_id, round_name of the current open round, as well as a list of the race_ids of the races
                         # in that round
     db, cursor = database_connect()
 
@@ -69,8 +76,9 @@ def get_round_snails(race_IDs): # returns a list of objects, each of which conta
     return query_data
 
 
-def get_open_round_details():   # Returns an object specifying a the round id and name of the current open round, as well as
-                                # a list in the format returned by get_round_snails
+# Returns an object specifying a the round id and name of the current open round, as well as
+# a list in the format returned by get_round_snails
+def get_open_round_details():
     round_ID, round_name, race_IDs = get_open_round()
     races_snails_info = get_round_snails(race_IDs)
     round_details = {"round_id": round_ID, "round_name": round_name, "races": races_snails_info}
@@ -78,7 +86,8 @@ def get_open_round_details():   # Returns an object specifying a the round id an
     return round_details
 
 
-def store_predictions(user_id, race_predictions):   # Inserts the user's predictions in to the racepredictions table
+# Inserts the user's predictions into the racepredictions table
+def store_predictions(user_id, race_predictions):
     db, cursor = database_connect()
 
     snail_race_list = []
@@ -103,4 +112,78 @@ def database_connect():
     return db, cursor
 
 
+def get_future_round_details():
+    db = get_db()
+    cursor = db.cursor()
 
+    current_time = datetime.datetime.now()
+    args = str(current_time)
+    sql = "SELECT start_date FROM round WHERE status != 'Closed' AND start_date > %s"
+
+    cursor.execute(sql, (args,))
+
+    try:
+        race_date = cursor.fetchone()
+        race_date = race_date[0]
+
+        date_diff = race_date - current_time
+
+        days = date_diff.days
+        hours = int(round(date_diff.seconds / 3600, 0))
+        minutes = int(round((date_diff.seconds / 60) % 60, 0))
+        date_diff_intervals = {"status": 1, "days": days, "hours": hours, "minutes": minutes}
+
+        return date_diff_intervals
+
+    except:
+        failure = {"status": 0}
+        return failure
+
+
+# returns the snail name of the winner for all finished races in a round
+def get_snail_name_results():
+    db = get_db()
+    cursor = db.cursor()
+
+    query = """SELECT 
+    snailRaceResults.race_id, 
+    snailRaceResults.position, 
+    snails.name, trainers.name 
+FROM 
+    (SELECT snailRaces.race_id, 
+        snailRaces.snail_id, 
+        raceresult.position 
+
+    FROM 
+        (SELECT racecard.race_id, 
+            racecard.snail_id, 
+            race.round_id, 
+            race.race_date 
+        FROM racecard 
+        JOIN race ON racecard.race_id = race.race_id 
+
+        WHERE race.round_id IN 
+            (SELECT round_id 
+            FROM 
+                (SELECT round.round_id, 
+                    MAX(round.start_date) AS start_date 
+                FROM round 
+                WHERE round.closed = 'f'
+                GROUP BY round.round_id) AS maxDateQuery)) 
+            AS snailRaces 
+        JOIN raceresult ON snailRaces.race_id = raceresult.race_id 
+        AND snailRaces.snail_id = raceresult.snail_id) 
+    AS snailRaceResults 
+    JOIN snails ON snailRaceResults.snail_id = snails.snail_id 
+    JOIN trainers ON snails.trainer_id = trainers.trainer_id
+    WHERE snailRaceResults.position = 1;
+"""
+
+    try:
+        cursor.execute(query)
+        db.commit()
+    except db.Error as err:
+        print(err)
+        return False
+
+    return (cursor.fetchall())
