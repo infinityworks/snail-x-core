@@ -13,8 +13,8 @@ def set_new_user(user):
     hashed_password = generate_password_hash(user.password)
 
     query = "INSERT INTO users (first_name, last_name, email, password) VALUES ('{}', '{}', '{}', '{}');".format(
-            user.first_name, user.last_name, user.email, hashed_password
-        )
+        user.first_name, user.last_name, user.email, hashed_password
+    )
 
     try:
         cursor.execute(query)
@@ -26,7 +26,7 @@ def set_new_user(user):
     return True
 
 
-def email_is_duplicate(email):
+def check_is_email_duplicate(email):
     db = get_db()
     cursor = db.cursor()
 
@@ -79,6 +79,7 @@ def get_id_by_email(email):
 def get_user_predictions(user_id, round_id):
     db = get_db()
     cursor = db.cursor()
+
     query = "SELECT racepredictions.race_id, " \
             "       racepredictions.snail_id " \
             "FROM racepredictions " \

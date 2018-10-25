@@ -26,7 +26,8 @@ def register_user():
 def check_duplicate_email():
     form_data = request.get_json()
     user_repository = UserRepository()
-    return {"result": user_repository.check_email(form_data['email'])}, status.HTTP_200_OK
+    is_duplicate_email = user_repository.check_is_email_duplicate(form_data['email'])
+    return {"result": is_duplicate_email}, status.HTTP_200_OK
 
 
 @user.route("/login-user", methods=["POST"])
@@ -64,18 +65,17 @@ def get_open_round():
 
     return json.dumps(round_data)
 
-
+  
 @user.route("/get-current-round-results", methods=["GET"])
 def get_current_race_results():
     round_repo = RoundRepository()
     results = round_repo.get_current_round_race_results()
-    print(results)
 
     if results:
         return_data = json.dumps(results)
         return return_data, status.HTTP_200_OK
     else:
-        return {"message": "Error. No current round results"}, status.HTTP_204_NO_CONTENT
+         return {"message": "Error. No current round results"}, status.HTTP_204_NO_CONTENT
 
 
 @user.route("/store-predictions", methods=["POST"])
@@ -83,9 +83,9 @@ def store_predictions():
     predictions_data = request.get_json()
     predictions_repository = RoundRepository()
 
-    success = predictions_repository.store_predictions(
-        predictions_data['userEmail'], predictions_data['racePredictions'])
-
+    success = predictions_repository.store_predictions(predictions_data['userEmail'],
+                                                       predictions_data['racePredictions'])
+   
     if success:
         return {"message": "Successfully registered predictions."}, status.HTTP_201_CREATED
     else:
