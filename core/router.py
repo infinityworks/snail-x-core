@@ -65,6 +65,18 @@ def get_open_round():
 
     return json.dumps(round_data)
 
+  
+@user.route("/get-current-round-results", methods=["GET"])
+def get_current_race_results():
+    round_repo = RoundRepository()
+    results = round_repo.get_current_round_race_results()
+
+    if results:
+        return_data = json.dumps(results)
+        return return_data, status.HTTP_200_OK
+    else:
+         return {"message": "Error. No current round results"}, status.HTTP_204_NO_CONTENT
+
 
 @user.route("/store-predictions", methods=["POST"])
 def store_predictions():
@@ -73,7 +85,7 @@ def store_predictions():
 
     success = predictions_repository.store_predictions(predictions_data['userEmail'],
                                                        predictions_data['racePredictions'])
-
+   
     if success:
         return {"message": "Successfully registered predictions."}, status.HTTP_201_CREATED
     else:
@@ -85,6 +97,4 @@ def check_future_rounds():
     round_repository = RoundRepository()
     future_round_data = round_repository.check_future_round()
 
-    print("RARR")
-    print(future_round_data)
     return json.dumps(future_round_data)
