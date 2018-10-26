@@ -1,4 +1,3 @@
-from flask import Flask
 from flask_cors import CORS
 from flask_api import FlaskAPI
 
@@ -7,7 +6,7 @@ app = FlaskAPI(__name__)
 CORS(app)
 
 from core.router import user
-from core.router import round
+from core.routers.round_router import round_router
 
 app.register_blueprint(user)
-app.register_blueprint(round)
+app.register_blueprint(round_router)
