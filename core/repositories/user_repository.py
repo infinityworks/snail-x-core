@@ -22,13 +22,23 @@ class UserRepository:
 
         return user
 
+    def get_user_results(self, email):
+        print("********* GET USER RESULTS ************")
+        predictions = self.get_predictions_from_db(email)
+        print(predictions)
+
+
     def get_predictions(self, email):
         user_id = self.get_user_from_db(email)
         round_id = self.get_round_from_db()
 
+        if user_id == "User Not In Database":
+            return "User Not In Database"
+
         if not round_id:
             return_predictions = ["No Open Round"]
             return return_predictions
+
 
         predictions = self.get_predictions_from_db(user_id, round_id)
         return_predictions = []

@@ -113,7 +113,7 @@ def get_future_round_details():
 
     current_time = datetime.datetime.now()
     args = str(current_time)
-    sql = "SELECT start_date FROM round WHERE status != 'Closed' AND start_date > %s"
+    sql = "SELECT start_date FROM round WHERE closed = 'f' AND start_date > %s"
 
     cursor.execute(sql, (args,))
 

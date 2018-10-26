@@ -73,12 +73,16 @@ def get_id_by_email(email):
 
     user_data = cursor.fetchone()
 
-    return user_data[0]
+    if user_data:
+        return user_data[0]
+    else:
+        return "User Not In Database"
 
 
 def get_user_predictions(user_id, round_id):
     db = get_db()
     cursor = db.cursor()
+
     query = "SELECT racepredictions.race_id, " \
             "       racepredictions.snail_id " \
             "FROM racepredictions " \
