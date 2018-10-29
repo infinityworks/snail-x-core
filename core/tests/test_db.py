@@ -5,8 +5,6 @@ from mock import patch
 # from core.models.user import User
 from core.repositories.user_repository import UserRepository
 from core import app
-import requests
-
 import json
 
 
