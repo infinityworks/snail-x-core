@@ -1,14 +1,17 @@
-import unittest
-import core.source.round_source
-
-
-class TestRoundSource(unittest.TestCase):
-
-    def test_get_open_round_returns_round_id(self):
-        # returns an integer round_id
-
-    def test_get_open_round_returns_round__name(self):
-        # returns a string round_name
-
-    def test_get_open_round_returns_round__name(self):
-        # returns a list of integer race ids (of length x?)
+# import unittest
+# import psycopg2
+# import unittest
+# from unittest.mock import Mock
+# from unittest.mock import patch, MagicMock
+# from core.repositories.user_repository import UserRepository
+# from core import app
+# import json
+# from core.repositories.round_repository import RoundRepository
+# from core.source import round_source
+#
+# class testRoundSource(unittest.TestCase):
+#
+#     @patch.object('core.db.db_func.connect_to_database', MagicMock(return_value=1))
+#     def test_get_round_snails(self, db_connection):
+#         result = RoundRepository().get_is_open_round()
+#         self.assertEqual(True, result)

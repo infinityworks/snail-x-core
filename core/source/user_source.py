@@ -89,6 +89,7 @@ def get_user_predictions(user_id, round_id):
             "JOIN race ON racepredictions.race_id = race.race_id " \
             "WHERE user_id = \'" + str(user_id) + "\' AND round_id = \'" + str(round_id) + "\';"
 
+
     try:
         cursor.execute(query)
         db.commit()
