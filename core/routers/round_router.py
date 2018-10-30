@@ -34,8 +34,8 @@ def get_open_round():
 
 @round_router.route("/get-current-round-results", methods=["GET"])
 def get_current_race_results():
-    round_repo = RoundRepository()
-    results = round_repo.get_current_round_race_results()
+    round_repository = RoundRepository()
+    results = round_repository.get_current_round_race_results()
 
     if results:
         return_data = json.dumps(results)
@@ -51,16 +51,3 @@ def check_future_rounds():
 
     return json.dumps(future_round_data)
 
-
-@round_router.route("/store-predictions", methods=["POST"])
-def store_predictions():
-    predictions_data = request.get_json()
-    predictions_repository = RoundRepository()
-
-    success = predictions_repository.store_predictions(predictions_data['userEmail'],
-                                                       predictions_data['racePredictions'])
-
-    if success:
-        return {"message": "Successfully registered predictions."}, status.HTTP_201_CREATED
-    else:
-        return {"message": "Failed registering the predictions."}, status.HTTP_400_BAD_REQUEST

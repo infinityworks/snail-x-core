@@ -54,15 +54,3 @@ def get_user_results():
         return return_data, status.HTTP_200_OK
     else:
         return {"message": "Error. No current round results"}, status.HTTP_204_NO_CONTENT
-
-
-@user_router.route("/user-predictions", methods=["POST"])
-def get_predictions():
-    form_data = request.get_json()
-    user_repository = UserRepository()
-    predictions = user_repository.get_predictions(form_data['email'])
-    if predictions:
-        return_data = json.dumps(predictions)
-        return return_data, status.HTTP_200_OK
-    else:
-        return {"message": "Error. No predictions made"}, status.HTTP_204_NO_CONTENT
