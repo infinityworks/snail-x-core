@@ -14,8 +14,8 @@ class RoundRepository:
     def get_is_inflight_round(self):
         round_id = round_source.get_inflight_round_id()
         if round_id:
-            return True
-        return False
+            return True, round_id
+        return False, 0
 
     def get_open_round_details(self):
         return round_source.get_open_round_details()

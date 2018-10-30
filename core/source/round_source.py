@@ -8,10 +8,22 @@ def get_open_round():
 
     current_time = datetime.datetime.now()
 
-    args = (current_time, )
+    args = (current_time, current_time)
 
-    sql = "SELECT DISTINCT round_id, round_name, race_id FROM fulldataview WHERE closed = 'f' AND race_date > %s"
-
+    sql = """SELECT * 
+                FROM round 
+                WHERE round.round_id IN 
+                        (SELECT miniview.round_id 
+                        FROM 
+                                (SELECT round_id, 
+                                        closed, 
+                                        start_date, 
+                                        MIN(race_date) 
+                                FROM fulldataview 
+                                GROUP BY round_id, closed, start_date) AS miniview 
+                        WHERE closed = 'f' 
+                        AND miniview.start_date < %s 
+                        AND miniview.min > %s)"""
     cursor.execute(sql, args)  # inserts the current date and time in to the above SQL query
 
     raceIDs = []
@@ -40,7 +52,7 @@ def get_inflight_round_id():
     current_time = datetime.datetime.now()
     args = (current_time, )
 
-    query = "SELECT round_id FROM fulldataview WHERE start_date < %s AND closed = 'f'"
+    query = "SELECT DISTINCT round_id FROM fulldataview WHERE start_date < %s AND closed = 'f'"
 
     try:
         cursor.execute(query, args)

@@ -58,6 +58,26 @@ def get_predictions():
         return {"message": "Error. No predictions made"}, status.HTTP_204_NO_CONTENT
 
 
+@user.route("/get-predictions-and-results", methods=["POST"])
+def get_predictions_and_results():
+    form_data = request.get_json()
+    user_repository = UserRepository()
+    predictions = user_repository.get_predictions_and_results(form_data['userEmail'], form_data['roundID'])
+
+    return predictions, status.HTTP_200_OK
+
+@user.route("/specific-user-predictions", methods=["POST"])
+def get_specific_round_predictions():
+    form_data = request.get_json()
+    user_repository = UserRepository()
+    predictions = user_repository.get_specific_round_predictions(form_data['userEmail'], form_data['roundID'])
+
+    if predictions:
+        return_data = json.dumps(predictions)
+        return return_data, status.HTTP_200_OK
+    else:
+        return {"message": "Error. No predictions made"}, status.HTTP_204_NO_CONTENT
+
 
 @user.route("/get-open-round", methods=["GET"])
 def get_open_round():
