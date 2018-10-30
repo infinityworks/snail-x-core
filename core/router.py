@@ -66,6 +66,7 @@ def get_predictions_and_results():
 
     return predictions, status.HTTP_200_OK
 
+
 @user.route("/specific-user-predictions", methods=["POST"])
 def get_specific_round_predictions():
     form_data = request.get_json()
@@ -79,6 +80,21 @@ def get_specific_round_predictions():
         return {"message": "Error. No predictions made"}, status.HTTP_204_NO_CONTENT
 
 
+@user.route("/check-closed-predictions", methods=["POST"])
+def get_closed_round_predictions():
+    print("GET CLOSED ROUND PREDICTIONS")
+    form_data = request.get_json()
+    print(form_data)
+    user_repository = UserRepository()
+    predictions = user_repository.get_predictions_and_results_from_db(form_data['userEmail'], form_data['roundID'])
+    print("AAAAAAA")
+    print(predictions)
+    if predictions:
+        return True
+    else:
+        return False
+
+
 @user.route("/get-open-round", methods=["GET"])
 def get_open_round():
     round_repository = RoundRepository()
@@ -86,6 +102,12 @@ def get_open_round():
 
     return json.dumps(round_data)
 
+@user.route("/get-all-rounds-closed", methods=["GET"])
+def get_all_rounds_closed():
+    round_repository = RoundRepository()
+    round_status = round_repository.get_all_rounds_closed()
+
+    return json.dumps(round_status)
   
 @user.route("/get-current-round-results", methods=["GET"])
 def get_current_race_results():
@@ -97,6 +119,19 @@ def get_current_race_results():
         return return_data, status.HTTP_200_OK
     else:
          return {"message": "Error. No current round results"}, status.HTTP_204_NO_CONTENT
+
+@user.route("/get-closed-round-results", methods=["GET"])
+def get_closed_race_results():
+    round_repo = RoundRepository()
+    results = round_repo.get_closed_round_race_results()
+
+    print("GET CLOSED ROUND RESULTS")
+    if results:
+        return_data = json.dumps(results)
+        print(return_data)
+        return return_data, status.HTTP_200_OK
+    else:
+        return {"message": "Error. No current round results"}, status.HTTP_204_NO_CONTENT
 
 
 @user.route("/check-user-results", methods=["POST"])
