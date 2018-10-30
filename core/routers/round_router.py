@@ -51,3 +51,9 @@ def check_future_rounds():
 
     return json.dumps(future_round_data)
 
+
+@round_router.route("closed-round-ids")
+def get_all_closed_round_ids():
+    round_repository = RoundRepository()
+    return round_repository.get_all_closed_round_ids()
+
