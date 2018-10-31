@@ -58,8 +58,9 @@ def get_inflight_round_id():
             "           MIN(race_date) AS first_race, " \
             "           closed " \
             "FROM fulldataview " \
-            "GROUP BY round_id, closed) AS minDateRound" \
-            "WHERE minDateRound.first_race < %s;"
+            "GROUP BY round_id, closed) AS minDateRound " \
+            "WHERE minDateRound.first_race < %s" \
+            "AND minDateRound.closed = 'f';"
 
     try:
         cursor.execute(query, args)
@@ -68,6 +69,7 @@ def get_inflight_round_id():
         return False
 
     row = cursor.fetchone()
+
     if row:
         return row[0]
     else:
@@ -181,20 +183,28 @@ def get_future_round_details():
 
 def get_all_rounds_closed():
     db = get_db()
-    cursor = db.cursor()
+    cursor1 = db.cursor()
+    #cursor2 = db.cursor()
 
-    sql = "SELECT * FROM round WHERE closed = 'f';"
+    sql1 = "SELECT * FROM round WHERE closed = 'f';"
+    sql2 = "SELECT * FROM round;"
 
-    cursor.execute(sql)
-    row = cursor.fetchone()
+    cursor1.execute(sql1)
+    row = cursor1.fetchone()
 
-    if row:
-        return 0
+    cursor1.execute(sql2)
+    all_rows = cursor1.fetchone()
+
+    if all_rows:
+        if row:
+            return 0
+        else:
+            sql = "SELECT round_id, MAX(start_date) FROM round GROUP BY round_id;"
+            cursor1.execute(sql)
+            round_id = cursor1.fetchone()[0]
+            return round_id
     else:
-        sql = "SELECT round_id, MAX(start_date) FROM round GROUP BY round_id;"
-        cursor.execute(sql)
-        round_id = cursor.fetchone()[0]
-        return round_id
+        return 0
 
 
 # returns the snail name of the winner for all finished races in a round
