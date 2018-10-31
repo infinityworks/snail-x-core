@@ -140,6 +140,8 @@ def get_open_round_details():
 
 # Inserts the user's predictions into the racepredictions table
 def store_predictions(user_id, race_predictions):
+    print(user_id)
+    print(race_predictions)
     db, cursor = database_connect()
 
     snail_race_list = []

@@ -50,8 +50,7 @@ def get_predictions():
     form_data = request.get_json()
     user_repository = UserRepository()
     predictions = user_repository.get_predictions(form_data['email'])
-
-    if predictions:
+    if predictions != []:
         return_data = json.dumps(predictions)
         return return_data, status.HTTP_200_OK
     else:
