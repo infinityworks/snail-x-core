@@ -57,6 +57,38 @@ def get_predictions():
         return {"message": "Error. No predictions made"}, status.HTTP_204_NO_CONTENT
 
 
+@user.route("/get-predictions-and-results", methods=["POST"])
+def get_predictions_and_results():
+    form_data = request.get_json()
+    user_repository = UserRepository()
+    predictions = user_repository.get_predictions_and_results(form_data['userEmail'], form_data['roundID'])
+
+    return predictions, status.HTTP_200_OK
+
+
+@user.route("/specific-user-predictions", methods=["POST"])
+def get_specific_round_predictions():
+    form_data = request.get_json()
+    user_repository = UserRepository()
+    predictions = user_repository.get_specific_round_predictions(form_data['userEmail'], form_data['roundID'])
+
+    if predictions:
+        return_data = json.dumps(predictions)
+        return return_data, status.HTTP_200_OK
+    else:
+        return {"message": "Error. No predictions made"}, status.HTTP_204_NO_CONTENT
+
+
+@user.route("/get-closed-predictions", methods=["POST"])
+def get_closed_round_predictions():
+    form_data = request.get_json()
+    user_repository = UserRepository()
+    predictions = user_repository.get_predictions_and_results_from_db(form_data['userEmail'], form_data['roundID'])
+    if predictions:
+        return predictions
+    else:
+        return {"message": "No predictions made"}, status.HTTP_204_NO_CONTENT
+
 
 @user.route("/get-open-round", methods=["GET"])
 def get_open_round():
@@ -65,6 +97,12 @@ def get_open_round():
 
     return json.dumps(round_data)
 
+@user.route("/get-all-rounds-closed", methods=["GET"])
+def get_all_rounds_closed():
+    round_repository = RoundRepository()
+    round_status = round_repository.get_all_rounds_closed()
+
+    return json.dumps(round_status)
   
 @user.route("/get-current-round-results", methods=["GET"])
 def get_current_race_results():
@@ -77,13 +115,22 @@ def get_current_race_results():
     else:
          return {"message": "Error. No current round results"}, status.HTTP_204_NO_CONTENT
 
+@user.route("/get-closed-round-results", methods=["GET"])
+def get_closed_race_results():
+    round_repo = RoundRepository()
+    results = round_repo.get_closed_round_race_results()
+
+    if results:
+        return_data = json.dumps(results)
+        return return_data, status.HTTP_200_OK
+    else:
+        return {"message": "Error. No current round results"}, status.HTTP_204_NO_CONTENT
+
 
 @user.route("/check-user-results", methods=["POST"])
 def get_user_results():
     form_data = request.get_json()
     user_repository = UserRepository()
-    print("*** USERS EMAIL ***")
-    print(form_data['email'])
     results = user_repository.get_user_results(form_data['email'])
 
     if results:

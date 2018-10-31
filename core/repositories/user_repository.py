@@ -1,6 +1,6 @@
 from core.models.user import User
 from core.source.user_source import set_new_user, find_one_by_email, check_is_email_duplicate, get_id_by_email, \
-    get_user_predictions
+    get_user_predictions, get_user_predictions_and_results
 from werkzeug.security import check_password_hash
 from core.source.snail_source import get_snail_name
 from core.source.trainer_source import get_trainer_name
@@ -25,10 +25,7 @@ class UserRepository:
         return user
 
     def get_user_results(self, email):
-        print("********* GET USER RESULTS ************")
         predictions = self.get_predictions_from_db(email)
-        print(predictions)
-
 
     def get_predictions(self, email):
         user_id = self.get_user_from_db(email)
@@ -41,7 +38,6 @@ class UserRepository:
             return_predictions = ["No Open Round"]
             return return_predictions
 
-
         predictions = self.get_predictions_from_db(user_id, round_id)
         return_predictions = []
 
@@ -49,6 +45,36 @@ class UserRepository:
             snail = self.get_snail_name_from_db(prediction[1])
             trainer = self.get_trainer_name_from_db(snail[0][1])
             return_predictions.append([prediction[0], prediction[1], snail[0][0], trainer, round_id])
+
+        return return_predictions
+
+    def get_specific_round_predictions(self, user_email, round_id):
+        predictions = self.get_predictions_from_db(get_id_by_email(user_email), round_id)
+
+        return_predictions = []
+
+        for prediction in predictions:
+            snail = self.get_snail_name_from_db(prediction[1])
+            trainer = self.get_trainer_name_from_db(snail[0][1])
+            return_predictions.append([prediction[0], prediction[1], snail[0][0], trainer, round_id])
+
+        return return_predictions
+
+    def get_predictions_and_results(self, user_email, round_id):
+        predictions = self.get_predictions_and_results_from_db(get_id_by_email(user_email), round_id)
+
+        return_predictions = []
+
+        for predictionResult in predictions:
+            resultObject = {}
+            resultObject["raceID"] = predictionResult[1]
+            resultObject["predictedID"] = predictionResult[3]
+            resultObject["predictedName"] = predictionResult[4]
+            resultObject["position"] = predictionResult[5]
+            resultObject["actualWinner"] = predictionResult[7]
+            resultObject["winnerTrainer"] = predictionResult[8]
+
+            return_predictions.append(resultObject)
 
         return return_predictions
 
@@ -66,3 +92,6 @@ class UserRepository:
 
     def get_trainer_name_from_db(self, snail):
         return get_trainer_name(snail)
+
+    def get_predictions_and_results_from_db(self, user_id, round_id):
+        return get_user_predictions_and_results(user_id, round_id)

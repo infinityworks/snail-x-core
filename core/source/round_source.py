@@ -8,10 +8,22 @@ def get_open_round():
 
     current_time = datetime.datetime.now()
 
-    args = (current_time, )
+    args = (current_time, current_time)
 
-    sql = "SELECT DISTINCT round_id, round_name, race_id FROM fulldataview WHERE closed = 'f' AND race_date > %s"
-
+    sql = """SELECT * 
+                FROM round 
+                WHERE round.round_id IN 
+                        (SELECT miniview.round_id 
+                        FROM 
+                                (SELECT round_id, 
+                                        closed, 
+                                        start_date, 
+                                        MIN(race_date) 
+                                FROM fulldataview 
+                                GROUP BY round_id, closed, start_date) AS miniview 
+                        WHERE closed = 'f' 
+                        AND miniview.start_date < %s 
+                        AND miniview.min > %s)"""
     cursor.execute(sql, args)  # inserts the current date and time in to the above SQL query
 
     raceIDs = []
@@ -40,7 +52,15 @@ def get_inflight_round_id():
     current_time = datetime.datetime.now()
     args = (current_time, )
 
-    query = "SELECT round_id FROM fulldataview WHERE start_date < %s AND closed = 'f'"
+    query = "SELECT round_id " \
+            "FROM " \
+            "   (SELECT round_id, " \
+            "           MIN(race_date) AS first_race, " \
+            "           closed " \
+            "FROM fulldataview " \
+            "GROUP BY round_id, closed) AS minDateRound " \
+            "WHERE minDateRound.first_race < %s" \
+            "AND minDateRound.closed = 'f';"
 
     try:
         cursor.execute(query, args)
@@ -48,9 +68,12 @@ def get_inflight_round_id():
     except db.Error:
         return False
 
-    round_ID = cursor.fetchone()[0]
+    row = cursor.fetchone()
 
-    return round_ID
+    if row:
+        return row[0]
+    else:
+        return False
 
 
 # returns a list of objects, each of which contains a race id and a race_data object
@@ -138,7 +161,7 @@ def get_future_round_details():
     current_time = datetime.datetime.now()
     args = str(current_time)
 
-    sql = "SELECT start_date FROM round WHERE closed = 'f' AND start_date > %s"
+    sql = "SELECT start_date FROM round WHERE closed = 'f' AND start_date > %s;"
 
     cursor.execute(sql, (args,))
 
@@ -158,6 +181,32 @@ def get_future_round_details():
     except:
         failure = {"status": 0}
         return failure
+
+
+def get_all_rounds_closed():
+    db = get_db()
+    cursor1 = db.cursor()
+    #cursor2 = db.cursor()
+
+    sql1 = "SELECT * FROM round WHERE closed = 'f';"
+    sql2 = "SELECT * FROM round;"
+
+    cursor1.execute(sql1)
+    row = cursor1.fetchone()
+
+    cursor1.execute(sql2)
+    all_rows = cursor1.fetchone()
+
+    if all_rows:
+        if row:
+            return 0
+        else:
+            sql = "SELECT round_id, MAX(start_date) FROM round GROUP BY round_id;"
+            cursor1.execute(sql)
+            round_id = cursor1.fetchone()[0]
+            return round_id
+    else:
+        return 0
 
 
 # returns the snail name of the winner for all finished races in a round
@@ -180,3 +229,31 @@ def get_snail_name_results():
         return False
 
     return (cursor.fetchall())
+
+
+def get_closed_round_results():
+    db = get_db()
+    cursor = db.cursor()
+
+    query = """SELECT race_id,
+                        snail_name,
+                        trainer_name 
+                FROM fulldataview 
+                WHERE round_id = 
+                    (SELECT round_id 
+                        FROM 
+                            (SELECT round_id, 
+                                    MAX(start_date) AS start_date 
+                            FROM fulldataview 
+                            GROUP BY round_id) AS roundMaxStartDate) 
+                                    AND position = 1 
+                                    AND closed = 't';"""
+
+    try:
+        cursor.execute(query)
+        db.commit()
+    except db.Error as err:
+        print(err)
+        return False
+
+    return cursor.fetchall()
