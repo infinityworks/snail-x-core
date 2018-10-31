@@ -41,7 +41,6 @@ class RoundRepository:
 
             return_data.append(raceObject)
 
-        print(return_data)
         return return_data
 
     def get_all_rounds_closed(self):
