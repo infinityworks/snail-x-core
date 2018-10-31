@@ -10,20 +10,30 @@ def get_open_round():
 
     args = (current_time, current_time)
 
-    sql = """SELECT * 
-                FROM round 
+    # sql = """SELECT *
+    #             FROM round
+    #             WHERE round.round_id IN
+    #                     (SELECT miniview.round_id
+    #                     FROM
+    #                             (SELECT round_id,
+    #                                     closed,
+    #                                     start_date,
+    #                                     MIN(race_date)
+    #                             FROM fulldataview
+    #                             GROUP BY round_id, closed, start_date) AS miniview
+    #                     WHERE closed = 'f'
+    #                     AND miniview.start_date < %s
+    #                     AND miniview.min > %s)"""
+
+    sql = """SELECT round.round_id, round.round_name, race.race_id 
+                FROM round JOIN race on round.round_id = race.round_id 
                 WHERE round.round_id IN 
                         (SELECT miniview.round_id 
-                        FROM 
-                                (SELECT round_id, 
-                                        closed, 
-                                        start_date, 
-                                        MIN(race_date) 
+                          FROM 
+                                (SELECT round_id, closed, start_date, MIN(race_date) 
                                 FROM fulldataview 
                                 GROUP BY round_id, closed, start_date) AS miniview 
-                        WHERE closed = 'f' 
-                        AND miniview.start_date < %s 
-                        AND miniview.min > %s)"""
+                                WHERE closed = 'f' AND miniview.start_date < %s AND miniview.min > %s)"""
     cursor.execute(sql, args)  # inserts the current date and time in to the above SQL query
 
     raceIDs = []
@@ -79,6 +89,9 @@ def get_inflight_round_id():
 # returns a list of objects, each of which contains a race id and a race_data object
 # each of which specifies a snail id, snail name and trainer name of that snail
 def get_round_snails(race_IDs):
+
+    print("**** RACE IDS ****")
+    print(race_IDs)
 
     db, cursor = database_connect()
 
