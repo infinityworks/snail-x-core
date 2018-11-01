@@ -55,7 +55,7 @@ def get_inflight_round_id():
             "           closed " \
             "FROM fulldataview " \
             "GROUP BY round_id, closed) AS minDateRound " \
-            "WHERE minDateRound.first_race < %s" \
+            "WHERE minDateRound.first_race < %s " \
             "AND minDateRound.closed = 'f';"
 
     try:
@@ -123,8 +123,6 @@ def get_open_round_details():
 
 # Inserts the user's predictions into the racepredictions table
 def store_predictions(user_id, race_predictions):
-    print(user_id)
-    print(race_predictions)
     db, cursor = database_connect()
 
     snail_race_list = []
@@ -182,7 +180,6 @@ def get_future_round_details():
 def get_all_rounds_closed():
     db = get_db()
     cursor1 = db.cursor()
-    #cursor2 = db.cursor()
 
     sql1 = "SELECT * FROM round WHERE closed = 'f';"
     sql2 = "SELECT * FROM round;"
