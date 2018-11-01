@@ -25,7 +25,7 @@ class UserRepository:
         return user
 
     def get_user_results(self, email):
-        predictions = self.get_predictions_from_db(email)
+        return self.get_predictions_from_db(email)
 
     def get_predictions(self, email):
         user_id = self.get_user_from_db(email)
@@ -66,15 +66,15 @@ class UserRepository:
         return_predictions = []
 
         for predictionResult in predictions:
-            resultObject = {}
-            resultObject["raceID"] = predictionResult[1]
-            resultObject["predictedID"] = predictionResult[3]
-            resultObject["predictedName"] = predictionResult[4]
-            resultObject["position"] = predictionResult[5]
-            resultObject["actualWinner"] = predictionResult[7]
-            resultObject["winnerTrainer"] = predictionResult[8]
+            result_object = {}
+            result_object["raceID"] = predictionResult[1]
+            result_object["predictedID"] = predictionResult[3]
+            result_object["predictedName"] = predictionResult[4]
+            result_object["position"] = predictionResult[5]
+            result_object["actualWinner"] = predictionResult[7]
+            result_object["winnerTrainer"] = predictionResult[8]
 
-            return_predictions.append(resultObject)
+            return_predictions.append(result_object)
 
         return return_predictions
 
