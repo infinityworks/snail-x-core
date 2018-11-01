@@ -83,7 +83,7 @@ def get_specific_round_predictions():
 def get_closed_round_predictions():
     form_data = request.get_json()
     user_repository = UserRepository()
-    predictions = user_repository.get_predictions_and_results_from_db(form_data['userEmail'], form_data['roundID'])
+    predictions = user_repository.get_predictions_and_results(form_data['userEmail'], form_data['roundID'])
     if predictions:
         return predictions
     else:

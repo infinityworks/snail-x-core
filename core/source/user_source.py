@@ -124,7 +124,9 @@ def get_user_predictions_and_results(user_id, round_id):
                 LEFT JOIN snails AS winnerSnails ON winningResult.snail_id = winnerSnails.snail_id 
                 JOIN race ON racepredictions.race_id = race.race_id 
                 JOIN round ON round.round_id = race.round_id 
-                LEFT JOIN trainers ON winnerSnails.snail_id = trainers.trainer_id;"""
+                LEFT JOIN trainers ON winnerSnails.snail_id = trainers.trainer_id
+                WHERE racepredictions.user_id = %s AND round.round_id = %s
+                ORDER BY racepredictions.race_id;"""
 
     try:
         cursor.execute(query, args)
