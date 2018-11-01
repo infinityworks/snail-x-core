@@ -2,6 +2,12 @@ from core.db.db_func import get_db
 import datetime
 
 
+def database_connect():
+    db = get_db()
+    cursor = db.cursor()
+    return db, cursor
+
+
 # returns round ID and name of currently-open round, as well as a list of race IDs for that round
 def get_open_round():
     db, cursor = database_connect()
@@ -10,8 +16,7 @@ def get_open_round():
 
     args = (current_time, current_time)
 
-
-    sql = """SELECT round.round_id, round.round_name, race.race_id 
+    query = """SELECT round.round_id, round.round_name, race.race_id 
                 FROM round JOIN race on round.round_id = race.round_id 
                 WHERE round.round_id IN 
                         (SELECT miniview.round_id 
@@ -20,33 +25,33 @@ def get_open_round():
                                 FROM fulldataview 
                                 GROUP BY round_id, closed, start_date) AS miniview 
                                 WHERE closed = 'f' AND miniview.start_date < %s AND miniview.min > %s)"""
-    cursor.execute(sql, args)  # inserts the current date and time in to the above SQL query
+    cursor.execute(query, args)  # inserts the current date and time in to the above SQL query
 
-    raceIDs = []
-    round_ID = 0
+    race_ids = []
+    round_id = 0
     round_name = ""
 
     # Adds the each race ID to a list of raceIDs, and updates round ID and round_name to that of the relevant round
     for record in cursor:
-        raceIDs.append(record[2])
-        round_ID = record[0]
+        race_ids.append(record[2])
+        round_id = record[0]
         round_name = record[1]
 
-    return round_ID, round_name, raceIDs
+    return round_id, round_name, race_ids
 
 
 # Returns the round_id, round_name of the current open round, as well as a list of the race_ids of the races
 def get_open_round_id():
-    round_ID, round_name, race_IDs = get_open_round()
+    round_id, _, _ = get_open_round()
 
-    return round_ID
+    return round_id
 
 
 def get_inflight_round_id():
-    db = get_db()
-    cursor = db.cursor()
+    db, cursor = database_connect()
+
     current_time = datetime.datetime.now()
-    args = (current_time, )
+    args = (current_time,)
 
     query = "SELECT round_id " \
             "FROM " \
@@ -74,35 +79,34 @@ def get_inflight_round_id():
 
 # returns a list of objects, each of which contains a race id and a race_data object
 # each of which specifies a snail id, snail name and trainer name of that snail
-def get_round_snails(race_IDs):
-
+def get_round_snails(race_ids):
     db, cursor = database_connect()
 
-    sql = """SELECT race_id,
+    query = """SELECT race_id,
                     snail_id, 
                     snail_name, 
                     trainer_name 
              FROM fulldataview 
-             WHERE race_id = ANY(ARRAY{});""".format(race_IDs)
+             WHERE race_id = ANY(ARRAY{});""".format(race_ids)
 
-    cursor.execute(sql)
+    cursor.execute(query)
 
     temp_races_dict = {}
     query_data = []
 
     for row in cursor:
-        raceid = row[0]
-        snailid = row[1]
-        snailname = row[2]
-        trainername = row[3]
+        race_id = row[0]
+        snail_id = row[1]
+        snail_name = row[2]
+        trainer_name = row[3]
 
-        temp_snails_obj = {"snail_id": snailid, "snail_name": snailname, "trainer_name": trainername}
+        temp_snails_obj = {"snail_id": snail_id, "snail_name": snail_name, "trainer_name": trainer_name}
 
-        if raceid in temp_races_dict:
-            temp_races_dict[raceid].append(temp_snails_obj)
+        if race_id in temp_races_dict:
+            temp_races_dict[race_id].append(temp_snails_obj)
         else:
-            temp_races_dict[raceid] = []
-            temp_races_dict[raceid].append(temp_snails_obj)
+            temp_races_dict[race_id] = []
+            temp_races_dict[race_id].append(temp_snails_obj)
 
     for race in temp_races_dict:
         race_obj = {"race_id": race, "race_data": temp_races_dict[race]}
@@ -114,9 +118,9 @@ def get_round_snails(race_IDs):
 # Returns an object specifying a the round id and name of the current open round, as well as
 # a list in the format returned by get_round_snails
 def get_open_round_details():
-    round_ID, round_name, race_IDs = get_open_round()
-    races_snails_info = get_round_snails(race_IDs)
-    round_details = {"round_id": round_ID, "round_name": round_name, "races": races_snails_info}
+    round_id, round_name, race_ids = get_open_round()
+    races_snails_info = get_round_snails(race_ids)
+    round_details = {"round_id": round_id, "round_name": round_name, "races": races_snails_info}
 
     return round_details
 
@@ -130,10 +134,10 @@ def store_predictions(user_id, race_predictions):
         snail_race_tuple = (race_id, user_id, race_predictions[race_id], datetime.datetime.now())
         snail_race_list.append(snail_race_tuple)
 
-    sql = "INSERT INTO racepredictions (race_id, user_id, snail_id, created) VALUES (%s, %s, %s, %s);"
+    query = "INSERT INTO racepredictions (race_id, user_id, snail_id, created) VALUES (%s, %s, %s, %s);"
 
     try:
-        cursor.executemany(sql, snail_race_list)
+        cursor.executemany(query, snail_race_list)
         db.commit()
     except db.Error as err:
         print("Error writing to DB: {}".format(err))
@@ -142,22 +146,15 @@ def store_predictions(user_id, race_predictions):
     return True
 
 
-def database_connect():
-    db = get_db()
-    cursor = db.cursor()
-    return db, cursor
-
-
 def get_future_round_details():
-    db = get_db()
-    cursor = db.cursor()
+    db, cursor = database_connect()
 
     current_time = datetime.datetime.now()
     args = str(current_time)
 
-    sql = "SELECT start_date FROM round WHERE closed = 'f' AND start_date > %s;"
+    query = "SELECT start_date FROM round WHERE closed = false AND start_date > %s"
 
-    cursor.execute(sql, (args,))
+    cursor.execute(query, (args,))
 
     try:
         race_date = cursor.fetchone()
@@ -171,32 +168,30 @@ def get_future_round_details():
         date_diff_intervals = {"status": 1, "days": days, "hours": hours, "minutes": minutes}
 
         return date_diff_intervals
-
     except:
         failure = {"status": 0}
         return failure
 
 
 def get_all_rounds_closed():
-    db = get_db()
-    cursor1 = db.cursor()
+    db, cursor = database_connect()
 
-    sql1 = "SELECT * FROM round WHERE closed = 'f';"
-    sql2 = "SELECT * FROM round;"
+    query_closed = "SELECT * FROM round WHERE closed = 'f';"
+    query_round = "SELECT * FROM round;"
 
-    cursor1.execute(sql1)
-    row = cursor1.fetchone()
+    cursor.execute(query_closed)
+    row = cursor.fetchone()
 
-    cursor1.execute(sql2)
-    all_rows = cursor1.fetchone()
+    cursor.execute(query_round)
+    all_rows = cursor.fetchone()
 
     if all_rows:
         if row:
             return 0
         else:
-            sql = "SELECT round_id, MAX(start_date) FROM round GROUP BY round_id;"
-            cursor1.execute(sql)
-            round_id = cursor1.fetchone()[0]
+            query = "SELECT round_id, MAX(start_date) FROM round GROUP BY round_id;"
+            cursor.execute(query)
+            round_id = cursor.fetchone()[0]
             return round_id
     else:
         return 0
@@ -204,8 +199,7 @@ def get_all_rounds_closed():
 
 # returns the snail name of the winner for all finished races in a round
 def get_snail_name_results():
-    db = get_db()
-    cursor = db.cursor()
+    db, cursor = database_connect()
 
     query = "SELECT race_id, " \
             "       position, " \
@@ -221,12 +215,26 @@ def get_snail_name_results():
         print(err)
         return False
 
-    return (cursor.fetchall())
+    return cursor.fetchall()
+
+
+def get_all_closed_round_names():
+    db, cursor = database_connect()
+
+    query = "select round_name from round where closed = TRUE order by round_name asc "
+
+    try:
+        cursor.execute(query)
+        db.commit()
+    except db.Error as err:
+        print(err)
+        return False
+
+    return cursor.fetchall()
 
 
 def get_closed_round_results():
-    db = get_db()
-    cursor = db.cursor()
+    db, cursor = database_connect()
 
     query = """SELECT race_id,
                         snail_name,
@@ -250,3 +258,18 @@ def get_closed_round_results():
         return False
 
     return cursor.fetchall()
+
+
+def find_one_by_name(round_name):
+    db, cursor = database_connect()
+
+    query = "select round_id from round where round_name = \'" + str(round_name) + "\'"
+
+    try:
+        cursor.execute(query)
+        db.commit()
+    except db.Error as err:
+        print(err)
+        return False
+
+    return cursor.fetchone()
