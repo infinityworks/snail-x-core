@@ -83,6 +83,7 @@ def get_user_predictions(user_id, round_id):
     db = get_db()
     cursor = db.cursor()
 
+
     query = "SELECT racepredictions.race_id, " \
             "       racepredictions.snail_id " \
             "FROM racepredictions " \
@@ -91,6 +92,41 @@ def get_user_predictions(user_id, round_id):
 
     try:
         cursor.execute(query)
+        db.commit()
+    except db.Error as err:
+        print(err)
+        return False
+
+    return cursor.fetchall()
+
+
+def get_user_predictions_and_results(user_id, round_id):
+    db = get_db()
+    cursor = db.cursor()
+
+    args = (user_id, round_id)
+
+    query = """SELECT round.round_id, 
+                        racepredictions.race_id, 
+                        racepredictions.user_id, 
+                        racepredictions.snail_id, 
+                        snails.name AS predicted_winner, 
+                        raceresult.position AS finishing_position, 
+                        winningResult.snail_id AS winning_snail, 
+                        winnerSnails.name AS winner_name, trainers.name 
+                FROM racepredictions 
+                JOIN snails ON racepredictions.snail_id = snails.snail_id 
+                LEFT JOIN raceresult ON raceresult.race_id = racepredictions.race_id AND raceresult.snail_id = snails.snail_id 
+                LEFT JOIN (SELECT * 
+                            FROM raceresult 
+                            WHERE position = 1) AS winningResult ON racepredictions.race_id = winningResult.race_id 
+                LEFT JOIN snails AS winnerSnails ON winningResult.snail_id = winnerSnails.snail_id 
+                JOIN race ON racepredictions.race_id = race.race_id 
+                JOIN round ON round.round_id = race.round_id 
+                LEFT JOIN trainers ON winnerSnails.snail_id = trainers.trainer_id;"""
+
+    try:
+        cursor.execute(query, args)
         db.commit()
     except db.Error as err:
         print(err)

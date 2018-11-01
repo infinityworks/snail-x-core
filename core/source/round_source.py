@@ -14,30 +14,37 @@ def get_open_round():
 
     current_time = datetime.datetime.now()
 
-    args = (current_time,)
+    args = (current_time, current_time)
 
-    sql = "SELECT DISTINCT round_id, round_name, race_id FROM fulldataview WHERE closed = false AND race_date > %s"
+    query = """SELECT round.round_id, round.round_name, race.race_id 
+                FROM round JOIN race on round.round_id = race.round_id 
+                WHERE round.round_id IN 
+                        (SELECT miniview.round_id 
+                          FROM 
+                                (SELECT round_id, closed, start_date, MIN(race_date) 
+                                FROM fulldataview 
+                                GROUP BY round_id, closed, start_date) AS miniview 
+                                WHERE closed = 'f' AND miniview.start_date < %s AND miniview.min > %s)"""
+    cursor.execute(query, args)  # inserts the current date and time in to the above SQL query
 
-    cursor.execute(sql, args)  # inserts the current date and time in to the above SQL query
-
-    raceIDs = []
-    round_ID = 0
+    race_ids = []
+    round_id = 0
     round_name = ""
 
     # Adds the each race ID to a list of raceIDs, and updates round ID and round_name to that of the relevant round
     for record in cursor:
-        raceIDs.append(record[2])
-        round_ID = record[0]
+        race_ids.append(record[2])
+        round_id = record[0]
         round_name = record[1]
 
-    return round_ID, round_name, raceIDs
+    return round_id, round_name, race_ids
 
 
 # Returns the round_id, round_name of the current open round, as well as a list of the race_ids of the races
 def get_open_round_id():
-    round_ID, round_name, race_IDs = get_open_round()
+    round_id, _, _ = get_open_round()
 
-    return round_ID
+    return round_id
 
 
 def get_inflight_round_id():
@@ -46,7 +53,15 @@ def get_inflight_round_id():
     current_time = datetime.datetime.now()
     args = (current_time,)
 
-    query = "SELECT round_id FROM fulldataview WHERE start_date < %s AND closed = false"
+    query = "SELECT round_id " \
+            "FROM " \
+            "   (SELECT round_id, " \
+            "           MIN(race_date) AS first_race, " \
+            "           closed " \
+            "FROM fulldataview " \
+            "GROUP BY round_id, closed) AS minDateRound " \
+            "WHERE minDateRound.first_race < %s " \
+            "AND minDateRound.closed = 'f';"
 
     try:
         cursor.execute(query, args)
@@ -54,9 +69,12 @@ def get_inflight_round_id():
     except db.Error:
         return False
 
-    round_id = cursor.fetchone()
+    row = cursor.fetchone()
 
-    return round_id
+    if row:
+        return row[0]
+    else:
+        return False
 
 
 # returns a list of objects, each of which contains a race id and a race_data object
@@ -64,14 +82,14 @@ def get_inflight_round_id():
 def get_round_snails(race_ids):
     db, cursor = database_connect()
 
-    sql = """SELECT race_id,
+    query = """SELECT race_id,
                     snail_id, 
                     snail_name, 
                     trainer_name 
              FROM fulldataview 
              WHERE race_id = ANY(ARRAY{});""".format(race_ids)
 
-    cursor.execute(sql)
+    cursor.execute(query)
 
     temp_races_dict = {}
     query_data = []
@@ -116,10 +134,10 @@ def store_predictions(user_id, race_predictions):
         snail_race_tuple = (race_id, user_id, race_predictions[race_id], datetime.datetime.now())
         snail_race_list.append(snail_race_tuple)
 
-    sql = "INSERT INTO racepredictions (race_id, user_id, snail_id, created) VALUES (%s, %s, %s, %s);"
+    query = "INSERT INTO racepredictions (race_id, user_id, snail_id, created) VALUES (%s, %s, %s, %s);"
 
     try:
-        cursor.executemany(sql, snail_race_list)
+        cursor.executemany(query, snail_race_list)
         db.commit()
     except db.Error as err:
         print("Error writing to DB: {}".format(err))
@@ -129,15 +147,14 @@ def store_predictions(user_id, race_predictions):
 
 
 def get_future_round_details():
-    db = get_db()
-    cursor = db.cursor()
+    db, cursor = database_connect()
 
     current_time = datetime.datetime.now()
     args = str(current_time)
 
-    sql = "SELECT start_date FROM round WHERE closed = false AND start_date > %s"
+    query = "SELECT start_date FROM round WHERE closed = false AND start_date > %s"
 
-    cursor.execute(sql, (args,))
+    cursor.execute(query, (args,))
 
     try:
         race_date = cursor.fetchone()
@@ -154,6 +171,30 @@ def get_future_round_details():
     except:
         failure = {"status": 0}
         return failure
+
+
+def get_all_rounds_closed():
+    db, cursor = database_connect()
+
+    query_closed = "SELECT * FROM round WHERE closed = 'f';"
+    query_round = "SELECT * FROM round;"
+
+    cursor.execute(query_closed)
+    row = cursor.fetchone()
+
+    cursor.execute(query_round)
+    all_rows = cursor.fetchone()
+
+    if all_rows:
+        if row:
+            return 0
+        else:
+            query = "SELECT round_id, MAX(start_date) FROM round GROUP BY round_id;"
+            cursor.execute(query)
+            round_id = cursor.fetchone()[0]
+            return round_id
+    else:
+        return 0
 
 
 # returns the snail name of the winner for all finished races in a round
@@ -181,6 +222,33 @@ def get_all_closed_round_names():
     db, cursor = database_connect()
 
     query = "select round_name from round where closed = TRUE order by round_name asc "
+
+    try:
+        cursor.execute(query)
+        db.commit()
+    except db.Error as err:
+        print(err)
+        return False
+
+    return cursor.fetchall()
+
+
+def get_closed_round_results():
+    db, cursor = database_connect()
+
+    query = """SELECT race_id,
+                        snail_name,
+                        trainer_name 
+                FROM fulldataview 
+                WHERE round_id = 
+                    (SELECT round_id 
+                        FROM 
+                            (SELECT round_id, 
+                                    MAX(start_date) AS start_date 
+                            FROM fulldataview 
+                            GROUP BY round_id) AS roundMaxStartDate) 
+                                    AND position = 1 
+                                    AND closed = 't';"""
 
     try:
         cursor.execute(query)

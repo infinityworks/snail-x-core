@@ -20,8 +20,8 @@ def get_active_round():
 @round_router.route("/get-inflight-round", methods=['GET'])
 def get_inflight_round():
     round_repository = RoundRepository()
-    round_status = round_repository.get_is_inflight_round()
-    return {"inflight": round_status}, status.HTTP_200_OK
+    round_status, round_id = round_repository.get_is_inflight_round()
+    return {"inflight": round_status, "round_id": round_id}, status.HTTP_200_OK
 
 
 @round_router.route("/get-open-round", methods=["GET"])
