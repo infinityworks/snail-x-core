@@ -55,7 +55,7 @@ def get_inflight_round_id():
             "           closed " \
             "FROM fulldataview " \
             "GROUP BY round_id, closed) AS minDateRound " \
-            "WHERE minDateRound.first_race < %s" \
+            "WHERE minDateRound.first_race < %s " \
             "AND minDateRound.closed = 'f';"
 
     try:
