@@ -57,3 +57,23 @@ def get_all_closed_round_names():
     round_repository = RoundRepository()
     names = round_repository.get_all_closed_round_names()
     return names
+
+
+@round_router.route("/get-all-rounds-closed", methods=["GET"])
+def get_all_rounds_closed():
+    round_repository = RoundRepository()
+    round_status = round_repository.get_all_rounds_closed()
+
+    return json.dumps(round_status)
+
+
+@round_router.route("/get-closed-round-results", methods=["GET"])
+def get_closed_race_results():
+    round_repo = RoundRepository()
+    results = round_repo.get_closed_round_race_results()
+
+    if results:
+        return_data = json.dumps(results)
+        return return_data, status.HTTP_200_OK
+    else:
+        return {"message": "Error. No current round results"}, status.HTTP_204_NO_CONTENT
