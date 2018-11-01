@@ -55,5 +55,5 @@ def check_future_rounds():
 @round_router.route("/round-names")
 def get_all_closed_round_names():
     round_repository = RoundRepository()
-    ids = round_repository.get_all_closed_round_names()
-    return ids
+    names = round_repository.get_all_closed_round_names()
+    return names

@@ -31,22 +31,20 @@ class RoundRepository:
 
     def get_all_closed_round_names(self):
         name_vector = round_source.get_all_closed_round_names()
+        print(name_vector)
         name_list = []
         for vector in name_vector:
             name_list.append(vector[0])
         return name_list
 
-    def find_one_by_name(round_name):
+    def find_one_by_name(self, round_name):
         return round_source.find_one_by_name(round_name)[0]
 
     def get_closed_round_race_results(self):
         all_results = round_source.get_closed_round_results()
         return_data = []
         for race in all_results:
-            race_object = {}
-            race_object['raceID'] = race[0]
-            race_object['snailName'] = race[1]
-            race_object['trainerName'] = race[2]
+            race_object = {'raceID': race[0], 'snailName': race[1], 'trainerName': race[2]}
 
             return_data.append(race_object)
 
