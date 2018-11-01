@@ -1,5 +1,3 @@
-import time
-from core.mappers import round_mapper
 from core.source import round_source
 from core.source.user_source import find_one_by_email
 
@@ -31,6 +29,13 @@ class RoundRepository:
     def get_current_round_race_results(self):
         return round_source.get_snail_name_results()
 
-    def get_all_closed_round_ids(self):
-        ids = round_source.get_all_closed_round_ids()
-        return ids
+    def get_all_closed_round_names(self):
+        name_vector = round_source.get_all_closed_round_names()
+        name_list = []
+        for vector in name_vector:
+            name_list.append(vector[0])
+        return name_list
+
+
+def find_one_by_name(round_name):
+    return round_source.find_one_by_name(round_name)[0]

@@ -1,6 +1,6 @@
 import json
 
-from flask import Blueprint, request
+from flask import Blueprint
 from flask_api import status
 
 from core.repositories.round_repository import RoundRepository
@@ -52,8 +52,8 @@ def check_future_rounds():
     return json.dumps(future_round_data)
 
 
-@round_router.route("closed-round-ids")
-def get_all_closed_round_ids():
+@round_router.route("/round-names")
+def get_all_closed_round_names():
     round_repository = RoundRepository()
-    return round_repository.get_all_closed_round_ids()
-
+    ids = round_repository.get_all_closed_round_names()
+    return ids

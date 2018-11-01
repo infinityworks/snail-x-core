@@ -1,5 +1,4 @@
 from core.db.db_func import get_db
-import datetime
 
 
 def database_connect():
@@ -11,12 +10,15 @@ def database_connect():
 def get_leaderboard_results_by_round_id_asc(round_id):
     db, cursor = database_connect()
 
-    query = "select @n := @n + 1 n, u.email, rr.score, rp.created " \
-            " from roundResults rr, (SELECT @n := 0) m " \
-            " join users u on u.user_id = rr.user_id " \
-            " join racePredictions rp on rp.user_id = rr.user_id " \
-            " where round_id = " + round_id + \
-            " order by rr.score desc"
+    query = "SELECT DISTINCT roundsUsers.round_id, roundsUsers.created, roundsUsers.email, roundresult.score " \
+            " FROM (SELECT roundsData.round_id, roundsData.created, users.email, users.user_id " \
+            " FROM (SELECT DISTINCT round.round_id, race.race_id, racepredictions.created, racepredictions.user_id " \
+            " FROM round JOIN race ON round.round_id = race.round_id " \
+            " JOIN racepredictions ON race.race_id = racepredictions.race_id " \
+            " GROUP BY race.race_id, round.round_id, racepredictions.created, racepredictions.user_id) AS roundsData " \
+            " JOIN users ON roundsData.user_id = users.user_id) AS roundsUsers " \
+            " JOIN roundresult ON roundsUsers.user_id = roundresult.user_id WHERE roundsUsers.round_id = " + str(round_id) + \
+            " ORDER BY roundresult.score desc"
     try:
         cursor.execute(query)
         db.commit()

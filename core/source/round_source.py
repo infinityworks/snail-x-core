@@ -16,7 +16,7 @@ def get_open_round():
 
     args = (current_time,)
 
-    sql = "SELECT DISTINCT round_id, round_name, race_id FROM fulldataview WHERE closed = 'f' AND race_date > %s"
+    sql = "SELECT DISTINCT round_id, round_name, race_id FROM fulldataview WHERE closed = false AND race_date > %s"
 
     cursor.execute(sql, args)  # inserts the current date and time in to the above SQL query
 
@@ -46,7 +46,7 @@ def get_inflight_round_id():
     current_time = datetime.datetime.now()
     args = (current_time,)
 
-    query = "SELECT round_id FROM fulldataview WHERE start_date < %s AND closed = 'f'"
+    query = "SELECT round_id FROM fulldataview WHERE start_date < %s AND closed = false"
 
     try:
         cursor.execute(query, args)
@@ -54,7 +54,7 @@ def get_inflight_round_id():
     except db.Error:
         return False
 
-    round_id = cursor.fetchone()[0]
+    round_id = cursor.fetchone()
 
     return round_id
 
@@ -135,7 +135,7 @@ def get_future_round_details():
     current_time = datetime.datetime.now()
     args = str(current_time)
 
-    sql = "SELECT start_date FROM round WHERE closed = 'f' AND start_date > %s"
+    sql = "SELECT start_date FROM round WHERE closed = false AND start_date > %s"
 
     cursor.execute(sql, (args,))
 
@@ -177,10 +177,10 @@ def get_snail_name_results():
     return cursor.fetchall()
 
 
-def get_all_closed_round_ids():
+def get_all_closed_round_names():
     db, cursor = database_connect()
 
-    query = "select round_id from round where closed = TRUE order by round_id desc"
+    query = "select round_name from round where closed = TRUE order by round_name asc "
 
     try:
         cursor.execute(query)
@@ -190,3 +190,18 @@ def get_all_closed_round_ids():
         return False
 
     return cursor.fetchall()
+
+
+def find_one_by_name(round_name):
+    db, cursor = database_connect()
+
+    query = "select round_id from round where round_name = \'" + str(round_name) + "\'"
+
+    try:
+        cursor.execute(query)
+        db.commit()
+    except db.Error as err:
+        print(err)
+        return False
+
+    return cursor.fetchone()
