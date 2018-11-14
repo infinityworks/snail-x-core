@@ -113,7 +113,8 @@ def get_user_predictions_and_results(user_id, round_id):
                         snails.name AS predicted_winner, 
                         raceresult.position AS finishing_position, 
                         winningResult.snail_id AS winning_snail, 
-                        winnerSnails.name AS winner_name, trainers.name 
+                        winnerSnails.name AS winner_name,
+                        trainers.name AS trainer_name
                 FROM racepredictions 
                 JOIN snails ON racepredictions.snail_id = snails.snail_id 
                 LEFT JOIN raceresult ON raceresult.race_id = racepredictions.race_id AND raceresult.snail_id = snails.snail_id 
@@ -123,7 +124,7 @@ def get_user_predictions_and_results(user_id, round_id):
                 LEFT JOIN snails AS winnerSnails ON winningResult.snail_id = winnerSnails.snail_id 
                 JOIN race ON racepredictions.race_id = race.race_id 
                 JOIN round ON round.round_id = race.round_id 
-                LEFT JOIN trainers ON winnerSnails.snail_id = trainers.trainer_id
+                LEFT JOIN trainers ON winnerSnails.trainer_id = trainers.trainer_id
                 WHERE racepredictions.user_id = %s AND round.round_id = %s
                 ORDER BY racepredictions.race_id;"""
 

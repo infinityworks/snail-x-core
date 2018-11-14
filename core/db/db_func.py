@@ -28,7 +28,8 @@ def connect_to_database():
         database="d67lulaq5muhb8"
     )
 
-#def connect_to_database():
+# def connect_to_database():
+#    print("CONNECTING to databse")
 #    return psycopg2.connect(
 #        host="localhost",
 #        user="root",

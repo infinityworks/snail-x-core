@@ -34,6 +34,7 @@ def get_open_round():
 
 @round_router.route("/get-current-round-results", methods=["GET"])
 def get_current_race_results():
+    print("***** Get current round results reached")
     round_repository = RoundRepository()
     results = round_repository.get_current_round_race_results()
 
