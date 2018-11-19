@@ -20,6 +20,9 @@ def teardown_db(teardown):
         db.close()
 
 
+def connect_to_database():
+    return psycopg2.connect(host="localhost", user="root", password="psqlpass", database="snailRacing")
+
 # def connect_to_database():
 #     return psycopg2.connect(
 #         host="ec2-23-21-147-71.compute-1.amazonaws.com",
@@ -28,10 +31,4 @@ def teardown_db(teardown):
 #         database="d67lulaq5muhb8"
 #     )
 
-def connect_to_database():
-    return psycopg2.connect(
-        host="localhost",
-        user="root",
-        password="psqlpass",
-        database="snailRacing"
-    )
+
